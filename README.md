@@ -1,7 +1,7 @@
 # TNM_project
 Code for the final project in the TNM course
 
-List of problems: 
+List of problem
 
 1) SCR
     - buy components and build circuit and test
