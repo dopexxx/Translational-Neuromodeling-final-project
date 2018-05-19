@@ -3,7 +3,7 @@ Code for the final project in the TNM course
 
 List of problems:
 
-1) SCR
+1) SCR MO
     - buy components and build circuit and test
     - write matlab readin/readout function
     - fix synchronization problem of matlab instances
@@ -13,9 +13,7 @@ List of problems:
         - choose sequence (experimental paradigm)
         - choose cues:
             Square and circle (black)
-        - choose stimuli
-
-
+        - choose stimuli: neutral simulus, sine wave w/ envelope
         - choose iter-trial-intervals
              ITI 1000ms +- 500ms,
         - choose probability structure of cue-stimulus contingency
@@ -32,11 +30,11 @@ List of problems:
 
 
     B. Practice
-        - code GUI for experimental procedure (COGENT ?)
+        - code GUI for experimental procedure (COGENT ?) JANNIS
         - test it on ourselves!!! (including analysis?)
 
 
-    C. Design behavioral questionnaire with 3 questions:
+    C. Design behavioral questionnaire with 3 questions: 
         - How concentrated do you feel today? (Scale from 0 to 10)
         - How quickly do you get nervous or anxious in everyday situations (0 to 10)
         - AFTER experiment: How well did you think you solved the task? (falten)
@@ -45,12 +43,12 @@ List of problems:
     
 3) Run the experiment
     A. Recruit participants
-        - find incentives
+        - find incentives (money)
         - Tell people that cue-stimulus-prediction-probability changes over time (also tell boundaries)
     B. Run experiment
     C. Reward participants
 
-4) Analysis 
+4) Analysis pipeline LUKAS
     i. HGF: basic analysis (posterior expectation)
         - think up pipeline for analysis 
             + which HGFs are fitted
