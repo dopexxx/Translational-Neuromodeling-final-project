@@ -1,11 +1,11 @@
-function [time,tone] = playtone(frequency,duration)
+function [tone,sf] = playtone(frequency,duration)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Generates and plays a sine wave stimulus of specified duration and 
 % frequency. The onset is windowed.
 % 
 % Moritz Gruber, May 2018
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+tic
 % Unpack inputs, set constants
 % -------------------------------------------------------------------------
 d = duration;
@@ -26,5 +26,8 @@ win = [win_1(1:nsamples/2) win_2(nsamples/2:end)];
 % -------------------------------------------------------------------------
 
 tone = win.*tone;
-sound(tone,sf)
+%tone = [tone  flip(tone)];
+%tone = flip(mean(tone)-tone);
+
+sound(tone,sf);
 end

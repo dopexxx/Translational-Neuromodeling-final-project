@@ -1,6 +1,0 @@
-%%%         EXPERIMENT PREPARATION          %%%%%
-
-
-
-
-
