@@ -1,4 +1,4 @@
-function scr_data = record_SCR(serialport,duration)
+function scr_data = record_SCR(serialport)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Records SCR data from custom-made Arduino-based measuring device. 
 %
@@ -24,6 +24,7 @@ fprintf('Serial connection is open... Measuring will begin shortly.')
 % -------------------------------------------------------------------------
 
 sf = 130;                      % --> approx. sampling frequency (Hz)
+duration = 20;                  % --> duration of recording (s)
 scr_data=zeros(4,duration*sf); % --> placeholder for measurements
 
 pause(5) % --> this is necessary for some weird reason
@@ -35,7 +36,7 @@ i = 1;                         % --> iterating variable
 % Recording loop
 % -------------------------------------------------------------------------
 
-figure; % --> % Open GUI to end measurements
+breakgui = figure; % --> % Open GUI to end measurements
 H = uicontrol('Style', 'PushButton','String', 'Stop',...
               'Callback','delete(gcbf)');
 
@@ -61,9 +62,6 @@ clear obj;
 
 keep = scr_data(2,:) > 0;
 scr_data = scr_data(:,keep);
-
-fprintf('Done measuring.\nTotal time: %d seconds.\n Number of samples: %d',...
-         round(timekeeper),length(scr_data(1,:)))
 
 plot(scr_data(2,:),scr_data(1,:))
 xlabel('Time (s)')
