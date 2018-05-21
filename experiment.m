@@ -27,7 +27,7 @@ disp(' ')
 pause(2)
 
 %% Start experiment (neutral stimuli)
-%{
+
 prompt = ['Please enter your blindfolded subject ID from the questionnaire: '];
 disp(prompt);
 
@@ -79,7 +79,6 @@ a = input('Ok. The experiment can start. Press ENTER if you are ready.');
 disp("Experiment starts in 5 seconds...")
 pause(2)
 
-%}
 [fig,ax] = figure2_imshow(metadata.fixation_cross,[]);
 pause(3);
 %%
