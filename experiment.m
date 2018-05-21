@@ -1,11 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % This script executes the 'natural-aversive conditioning' experiment.
-% Use this script for every participant individually and once only.
-%
+% Use this script for every participant individually 
 %
 % May 2018 - Jannis Born
-%
 %
 
 
@@ -81,7 +79,7 @@ pause(2)
 
 [fig,ax] = figure2_imshow(metadata.fixation_cross,[]);
 pause(3);
-%%
+%% Neutral stimuli
 for k = 1:metadata.trials
     % Show the visual cue
     if metadata.cues(k)
@@ -91,13 +89,16 @@ for k = 1:metadata.trials
     end
     pause(metadata.cue_presentation_time) % Present cue for 400ms
     
-    % Show fixation cross again
+    % Show call to action
+    set(get(ax,'Children'),'CData',metadata.prompt_image);
+    
+    % Record the prediction (1.2 sec time)
+    subject.responses(1,k) = record_response(); 
+    
+    % Show the fixation cross again
     set(get(ax,'Children'),'CData',metadata.fixation_cross);
     
-    % Record the prediction
-    subject.responses(1,k) = record_response(); % 1 sec
-    
-    % Play the neutral stimulus if applicable       - 1sec
+    % Play the neutral stimulus if applicable  
     if metadata.stimuli(k)
         stamp = present_stimulus('neutral');
         subject.stim_onsets(1,k,:) = stamp(4:end);
@@ -107,7 +108,7 @@ for k = 1:metadata.trials
         pause(metadata.sound_duration);
     end
     pause(metadata.ITI(k)); % 0.5 - 1.5 sec
-    % per trial: 3.5 sec + code running time.
+    
 end
 
 close all;
@@ -130,19 +131,23 @@ for k = 1:metadata.trials
         set(get(ax,'Children'),'CData',metadata.cue_images{2});
     end
     pause(metadata.cue_presentation_time) % Present cue for 400ms
-    set(get(ax,'Children'),'CData',metadata.fixation_cross);
+   
+    % Show call to action
+    set(get(ax,'Children'),'CData',metadata.prompt_image);
     
     % Record the prediction
-    subject.responses(2,k) = record_response(); % 1 sec
+    subject.responses(2,k) = record_response();
     
-    % Play the neutral stimulus if applicable       - 1sec
+    % Show the fixation cross again
+    set(get(ax,'Children'),'CData',metadata.fixation_cross);
+    
+    % Play the neutral stimulus if applicable      
     if metadata.stimuli(k)
         present_stimulus('aversive');
     else
         pause(metadata.sound_duration);
     end
     pause(metadata.ITI(k)); % 0.5 - 1.5 sec
-    % per trial: 3.5 sec + code running time.
 end
 
 close all;
@@ -244,48 +249,13 @@ end
 
 
 
-function [fig,ax] = figure2_update(fig,ax,img)
-    % Function that updates the picture presented on the second screen
-    % 
-    % Parameters:
-    % ---------------------------
-    % FIG           -  Figure Handle of the figure on the second screen
-    % AX            -  Axes Handle of the figure on the second screen
-    % IMG           -  {uint8, double} image to be displayed via imshow
-    %
-    % Returns:
-    % ---------------------------
-    % FIGHANDLE     -   from figure(), see 'doc figure' for details
-    %
-    % Jannis Born, May 2018
-    
-    MP = get(0, 'MonitorPositions');
-    
-    if size(MP, 1) == 1  % Single monitor
-        error("Only one screen found. Check connection!"); 
-    else                 % Multiple monitors
-        % Catch creation of figure with disabled visibility: 
-        posShift = MP(2, 3:4);
-        
-        imshow(img)
-        pos      = get(fig, 'Position');
-        set(fig,'color','w');  
-        set(fig, 'Units', 'normalized', 'outerposition',[0 0 1 1]);
-        %set(gca,'Unit','normalized','Position',[0 0 1 1]);
-        set(fig, 'Position', [pos(1:2) + posShift, pos(3:4)])
-        set(fig, 'Visible', 'on');
-        set(fig, 'menubar','none');
-        set(fig, 'NumberTitle','off');
-    end
-    
-
-end
-
 
 function [FigHandle,AxeH] = figure2_imshow(varargin)
     % Function that opens a new figure on the second screen (if one available)
     % and displays an image in full screen with the requirements for our TNM
-    % experiment.
+    % experiment. 
+    %
+    % Note: Second screen must be ON TOP of first screen.
     % 
     % Parameters:
     % ---------------------------

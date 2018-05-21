@@ -42,6 +42,10 @@ square = double(square(:,:,1));
 
 metadata.cue_images = {square; circle}; % Position 1 = cue for no sound, 2 for sound
 
+prompt_img = imread('data/cues/press_prompt.png');
+prompt_img = double(prompt_img(:,:,1));
+metadata.prompt_image = prompt_img;
+
 
 % Sound parameter
 metadata.sound_duration = 1;
