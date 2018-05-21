@@ -15,7 +15,7 @@ metadata = struct();
 % Experiment specific hyperparameter
 metadata.trials = 150;
 metadata.trials_per_pd = 30;
-metadata.pds = [0.9, 0.1, 0.5, 0.7, 0.3];
+metadata.pds = [0.9, 0.1, 0.5, 0.8, 0.2];
 metadata.cue_presentation_time = 0.4;
 metadata.response_awaiting_time = 1.2;
 

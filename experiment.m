@@ -79,7 +79,7 @@ pause(2)
 
 [fig,ax] = figure2_imshow(metadata.fixation_cross,[]);
 pause(3);
-%% Neutral stimuli
+%mnnnmmmm% Neutral stimuli
 for k = 1:metadata.trials
     % Show the visual cue
     if metadata.cues(k)
@@ -153,6 +153,8 @@ end
 close all;
 disp("You have reached the end of the experiment.");disp('');
 disp("Pick up your well deserved sweeeeeets");
+
+save('subject.mat','subject')
 
 
 %% Helper methods (do not execute)
