@@ -1,4 +1,4 @@
-function threshold_amplitude = calibrate_stim
+function tone = calibrate_stim
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Computes an individual calibration curve for an acoustic startle stimulus
 % based on repetitive exposure to stimuli of different amplitudes and
@@ -30,7 +30,7 @@ checkval = false; % needed in loop
 for i = 1:namps
     
    fprintf('\nStimulus %d of %d',i,namps);
-   playstim(amps(i),d);
+   play_aversive(amps(i),d);
    pause(0.5)
    
    while(~checkval) % Check if input is within bounds 
@@ -67,11 +67,11 @@ ylabel('Perceived painfulness score')
 % -------------------------------------------------------------------------
 fprintf('\n');
 input('Press ''Enter'' to hear your threshold stimulus');
-playstim(thresh,d)
 
 % Save output
 % -------------------------------------------------------------------------
-threshold_amplitude = thresh;
+tone = play_aversive(thresh,d);
+%threshold_amplitude = thresh;
 end
 
 

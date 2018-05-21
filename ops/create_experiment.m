@@ -8,32 +8,52 @@
 %   - Generating cue, ITI and stimuli sequences from the choosen PD
 %   - Binding all content together into a struct.
 
+clc; clear; close all;
+
 metadata = struct();
 
 % Experiment specific hyperparameter
 metadata.trials = 150;
 metadata.trials_per_pd = 30;
 metadata.pds = [0.9, 0.1, 0.5, 0.7, 0.3];
+metadata.cue_presentation_time = 0.4;
+metadata.response_awaiting_time = 1.2;
 
+
+% Make fixation cross
+% Insight: Fixation cross and cues need to have the same size, otherwise
+% the image update call does not work properly.
+fix_cross_size = [601,601];
+fix_cross = ones(fix_cross_size);
+fix_cross(301,250:350) = 0;
+fix_cross(250:350,301) = 0;
+metadata.fixation_cross = fix_cross;
+
+%%
 
 % Reading in cues
 circle = imread('data/cues/circle.png'); % Cue for sound (neutral or aversive)
+circle = imresize(circle,fix_cross_size);
+circle = double(circle(:,:,1));
+
 square = imread('data/cues/square.png'); % Cue for no sound
+square = imresize(square, fix_cross_size);
+square = double(square(:,:,1));
+
 metadata.cue_images = {square; circle}; % Position 1 = cue for no sound, 2 for sound
 
-% Neutral sound parameters
-metadata.neutral_sound = playtone(200,1);
 
-% Aversive sound parameters
-metadata.aversive_sound_dur = 1;
+% Sound parameter
+metadata.sound_duration = 1;
+metadata.sound_sampling_rate = 44100;
 
-% Read in parameter for neutral sound
-metadata.stimuli_duration = 100; % tone is played for 100ms
-metadata.stimuli_frequency = 20; % frequency of natural stimulus
+% Neutral sound
+metadata.sound_neutral = play_neutral(200,metadata.sound_duration);
+
 
 
 % Generate inter-trial-intervals
-metadata.ITI = (rand(metadata.trials,1)-0.5)*1000 + 1000;
+metadata.ITI = ((rand(metadata.trials,1)-0.5)*1000 + 1000)/1000;
 
 % Generate cue-sequence
 % 0 denotes cue for no sound, 1 for sound (neutral or aversive)
@@ -43,7 +63,11 @@ metadata.cues = randi([0 1],metadata.trials,1);
 metadata.stimuli = zeros(metadata.trials,1);
 for k = 1:length(metadata.stimuli)
     
-    prob_for_sound = metadata.pds(ceil(k/metadata.trials_per_pd)); % retrieve PD
+    if metadata.cues(k)
+        prob_for_sound = metadata.pds(ceil(k/metadata.trials_per_pd)); 
+    else
+        prob_for_sound = 1 - metadata.pds(ceil(k/metadata.trials_per_pd));
+    end
     r = rand();
     
     if r <= prob_for_sound

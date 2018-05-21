@@ -10,7 +10,7 @@ function maxamp = findmaxamp(duration)
 i = 0.5; % initial intensity
 
 while(1)
-    playstim(i,duration);
+    play_aversive(i,duration);
     choice = menu('Go further?','Yes','No');
     if choice==2 || choice==0
        break

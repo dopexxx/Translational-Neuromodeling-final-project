@@ -1,4 +1,4 @@
-function [tone,sf] = playtone(frequency,duration)
+function tone = play_neutral(frequency,duration)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Generates and plays a sine wave stimulus of specified duration and 
 % frequency. The onset is windowed.

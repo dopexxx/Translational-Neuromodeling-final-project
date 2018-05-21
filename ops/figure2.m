@@ -10,7 +10,7 @@ function FigHandle = figure2(varargin)
 %
 % Returns:
 % ---------------------------
-% no returns.
+% FIGHANDLE     - return of figure() method (see 'doc figure' for details)
 %
 % Jannis Born, May 2018
 
