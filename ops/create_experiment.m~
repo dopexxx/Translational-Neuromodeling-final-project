@@ -85,14 +85,8 @@ end
 metadata.train = struct();
 metadata.train.cues = randi([0 1],15,1); 
 metadata.train.ITI = ((rand(15,1)-0.5)*1000 + 1000)/1000;
-metadata.train.stimuli = zeros(15,1);
-for k = 1:15
-    if metadata.train.cues(k)
-        metadata.train.stimuli(k) = 1;
-    end
-end
-    
-    
+stim = zeros(15,1);
+
 save('data/metadata.mat','metadata')
 
 
