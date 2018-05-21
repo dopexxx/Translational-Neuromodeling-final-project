@@ -55,7 +55,7 @@ xlim  = ceil(thresh+5);
 x = 0:0.01:xlim;
 y = polyval(coeffs,x);
 
-figure;
+fig = figure;
 scatter(amps,rating); hold on
 plot(x,y); hold on;
 plot(thresh,90,'+','MarkerEdgeColor','black','MarkerSize',10)
@@ -67,6 +67,7 @@ ylabel('Perceived painfulness score')
 % -------------------------------------------------------------------------
 fprintf('\n');
 input('Press ''Enter'' to hear your threshold stimulus');
+close Figure 1;
 
 % Save output
 % -------------------------------------------------------------------------
