@@ -26,6 +26,7 @@ List of problems:
     B. Run experiment
 
 4) Analysis pipeline LUKAS
+    MORITZ LAPTOP HAS 35ms DELAY to JANNIS!! -> Hard code in timestamps!
     i. HGF: basic analysis (posterior expectation)
         - think up pipeline for analysis 
             + which HGFs are fitted
@@ -48,5 +49,10 @@ List of problems:
     
 6) Report
     - find out when it's due
+
+
+
+Cash:
+Billy - 8 Franken
 
 

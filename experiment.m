@@ -22,10 +22,15 @@ subject.stim_onsets = zeros(2,metadata.trials,3);
 
 %% Calibrate the maximal stimulus amplitude
 subject.aversive_sound = calibrate_stim();
+
 disp(' ')
 pause(2)
 
-%% Start experiment (neutral stimuli)
+%% Reduce amplitude
+subject.aversive_sound = subject.aversive_sound * 0.9;
+sound(subject.aversive_sound, 44100);
+
+%% Start experiment 
 
 prompt = ['Please enter your blindfolded subject ID from the questionnaire: '];
 disp(prompt);
@@ -142,14 +147,14 @@ for k = 1:metadata.trials
         subject.stim_onsets(1,k,:) = stamp(4:end);
     else
         stamp = clock;
-        subject.stim_onsets(2,k,:) = stamp(4:end);
+        subject.stim_onsets(1,k,:) = stamp(4:end);
         pause(metadata.sound_duration);
     end
     pause(metadata.ITI(k)); % 0.5 - 1.5 sec
     
 end
 
-save(['data/participants/',int2str(subject.ID),'.mat'],'subject');
+save(['data/recordings/subject_',int2str(subject.ID),'.mat'],'subject'); 
 close all;
 disp("You have reached your break");disp('');
 disp("Please fill out the questionnaire and hand it over to the experimentor");
@@ -162,9 +167,9 @@ disp("Second block starts in 5 seconds...")
 pause(1)
 [fig,ax] = figure2_imshow(metadata.fixation_cross,[]);
 pause(4);
+clock
 
 for k = 1:metadata.trials
-    
     % Show the visual cue
     if metadata.cues(k)
         set(get(ax,'Children'),'CData',metadata.cue_images{1});
@@ -184,17 +189,25 @@ for k = 1:metadata.trials
     
     % Play the neutral stimulus if applicable      
     if metadata.stimuli(k)
-        present_stimulus('aversive');
+        stamp = present_stimulus('aversive');
+        subject.stim_onsets(2,k,:) = stamp(4:end);
     else
         pause(metadata.sound_duration);
+        stamp = clock;
+        subject.stim_onsets(2,k,:) = stamp(4:end);
     end
     pause(metadata.ITI(k)); % 0.5 - 1.5 sec
 end
 
 close all;
-save(['data/participants/subject_',int2str(subject.ID),'.mat'],'subject'); 
+save(['data/recordings/subject_',int2str(subject.ID),'.mat'],'subject'); 
 disp("You have reached the end of the experiment.");disp('');
 disp("Pick up your well deserved sweeeeeets");
+
+subject = compute_score(subject)
+money = (subject.scores(1,1) * 6) + (subject.scores(2,1)*6);
+
+disp(['You will get ',num2str(money),' Franks!!! Congratz!'])
 
 
 

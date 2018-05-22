@@ -18,6 +18,7 @@ clc;clear;close all;
 d = 0.1;                 % duration
 namps = 10;              % # of calibration stimuli
 maxamp = findmaxamp(d)   % find max amplitude for current speaker settings
+a = input('Please press enter: ');
 amps = maxamp*randperm(namps)/namps; % create a random sequence of stimuli
 rating = zeros(1,namps); % placeholder for ratings  
 
