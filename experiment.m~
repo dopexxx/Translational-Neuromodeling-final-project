@@ -147,6 +147,7 @@ for k = 1:metadata.trials
     
 end
 
+save(['subject_,'int2str(subject.ID)],'.mat','subject');
 close all;
 disp("You have reached your break");disp('');
 disp("Please fill out the questionnaire and hand it over to the experimentor");
@@ -190,7 +191,7 @@ close all;
 disp("You have reached the end of the experiment.");disp('');
 disp("Pick up your well deserved sweeeeeets");
 
-save('subject.mat','subject')
+save(['subject_,'int2str(subject.ID),'.mat'],'subject'); 
 
 
 %% Helper methods (do not execute)

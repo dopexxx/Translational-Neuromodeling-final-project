@@ -9,7 +9,7 @@ function subject = compute_score(subject)
     %
     % Returns:
     % ---------------
-    % SCORES        {struct) contains additionally a field scores (double 
+    % SCORES        {struct) contains additionally a field "scores" (double 
     %                   of size 2x2)with rows for blocks (neutral, 
     %                   aversive) and columns the different metrics
     

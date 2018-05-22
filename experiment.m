@@ -109,6 +109,8 @@ close all;
 disp('Thanks. You are done with training.');
 pause(2)
 
+%
+a = input('The experiment can now start. Press ENTER if you are ready.');
 % Now the actual experiment can start.
 disp("Experiment starts in 5 seconds...")
 pause(4)
@@ -147,12 +149,15 @@ for k = 1:metadata.trials
     
 end
 
+save(['data/participants/',int2str(subject.ID),'.mat'],'subject');
 close all;
 disp("You have reached your break");disp('');
 disp("Please fill out the questionnaire and hand it over to the experimentor");
 
 
 %% Second block
+disp('Second block is preparing...')
+pause(3)
 disp("Second block starts in 5 seconds...")
 pause(1)
 [fig,ax] = figure2_imshow(metadata.fixation_cross,[]);
@@ -187,10 +192,10 @@ for k = 1:metadata.trials
 end
 
 close all;
+save(['data/participants/subject_',int2str(subject.ID),'.mat'],'subject'); 
 disp("You have reached the end of the experiment.");disp('');
 disp("Pick up your well deserved sweeeeeets");
 
-save('subject.mat','subject')
 
 
 %% Helper methods (do not execute)

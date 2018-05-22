@@ -30,8 +30,7 @@ List of problems:
         - think up pipeline for analysis 
             + which HGFs are fitted
             + which parameters are compared and HOW
-            + understand theory behind RFX analysis and write down how 
-              we would apply it to our data, concretely (inputs)
+            + understand theory behind RFX analysis and write down how we would apply it to our data, concretely (inputs)
         - SCR
             + postprocess data (filtering, synchronizing, etc.)
             + how to incorporate it
