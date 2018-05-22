@@ -9,8 +9,9 @@ function scr_data = record_SCR(serialport,duration)
 % Use the MATLAB command 'seriallist' or type 'ls /dev/tty.*' in a terminal
 % window to find the name of the serial port corresponding to the Arduino.
 %
-% 
-% Moritz Gruber, May 2018
+% Make sure your current directory is '~/TNM_project/'.
+%
+% Moritz Gruber, May 2018 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Open serial communication with Arduino
@@ -56,13 +57,13 @@ close all;
 fclose(obj); % --> close serial communication
 clear obj;
 
-% Crop data to nonzero entries, plot and return
+% Crop data to nonzero entries, plot and save
 % -------------------------------------------------------------------------
 
 keep = scr_data(2,:) > 0;
 scr_data = scr_data(:,keep);
 
-fprintf('Done measuring.\nTotal time: %d seconds.\n Number of samples: %d',...
+fprintf('Done measuring.\nTotal time: %d seconds.\nNumber of samples: %d',...
          round(timekeeper),length(scr_data(1,:)))
 
 plot(scr_data(2,:),scr_data(1,:))
@@ -70,5 +71,10 @@ xlabel('Time (s)')
 ylabel('Skin conductance (a.u.)')
 ylim([0 1100])
 xlim([0 max(scr_data(2,:))])
+
+filename = ['data/recordings/','SCR','_day_',num2str(tnow(3)),'_h_',...
+    num2str(tnow(4)),'_min_',num2str(tnow(5)),'.mat'];
+save(filename,'scr_data')
+fprintf('\nFile successfully saved as %s',filename)
 
 end
