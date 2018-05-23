@@ -1,4 +1,4 @@
-function tone = calibrate_stim
+function [tone,thresh] = calibrate_stim
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Computes an individual calibration curve for an acoustic startle stimulus
 % based on repetitive exposure to stimuli of different amplitudes and
@@ -73,7 +73,6 @@ close Figure 1;
 % Save output
 % -------------------------------------------------------------------------
 tone = play_aversive(thresh,d);
-%threshold_amplitude = thresh;
 end
 
 

@@ -42,7 +42,7 @@ H = uicontrol('Style', 'PushButton','String', 'Stop',...
 
 while timekeeper < duration && ishandle(H)
     tnow = clock;                   % --> Get current time
-    timekeeper = etime(tnow,tstart) % --> Compute elapsed time since start
+    timekeeper = etime(tnow,tstart); % --> Compute elapsed time since start
     read = read_SCR(obj)             % --> Read current SCR value
     
     % Store absolute and relative time and measurements

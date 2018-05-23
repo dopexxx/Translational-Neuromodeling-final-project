@@ -21,14 +21,15 @@ subject.stim_onsets = zeros(2,metadata.trials,3);
 
 
 %% Calibrate the maximal stimulus amplitude
-subject.aversive_sound = calibrate_stim();
+[subject.aversive_sound, subject.thresh] = calibrate_stim();
 
 disp(' ')
+
 pause(2)
 
 %% Reduce amplitude
-subject.aversive_sound = subject.aversive_sound * 0.9;
-sound(subject.aversive_sound, 44100);
+subject.thresh = subject.thresh * 0.9;
+subject.aversive_sound = play_aversive(subject.thresh, 0.1);
 
 %% Start experiment 
 
@@ -204,7 +205,8 @@ save(['data/recordings/subject_',int2str(subject.ID),'.mat'],'subject');
 disp("You have reached the end of the experiment.");disp('');
 disp("Pick up your well deserved sweeeeeets");
 
-subject = compute_score(subject)
+subject = compute_score(subject);
+subject.scores
 money = (subject.scores(1,1) * 6) + (subject.scores(2,1)*6);
 
 disp(['You will get ',num2str(money),' Franks!!! Congratz!'])

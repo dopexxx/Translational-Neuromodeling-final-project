@@ -3,27 +3,8 @@ Code for the final project in the TNM course
 
 List of problems:
 
-1) SCR MO
-    - test circuit, in particular together with experiment
-    - fix synchronization problem of matlab instances
-    
-2) Experimental design
-    A. Theory
-        - DONE
-
-    B. Practice
-        - Test it.
 
 
-    C. Design behavioral questionnaire with 3 questions: 
-        - order questions appropriately
-        - print 15x
-    
-3) Run the experiment
-    A. Recruit participants
-        - find incentives (money)
-        - Tell people that cue-stimulus-prediction-probability changes over time (also tell boundaries)
-    B. Run experiment
 
 4) Analysis pipeline LUKAS
     MORITZ LAPTOP HAS 35ms DELAY to JANNIS!! -> Hard code in timestamps!
@@ -37,6 +18,7 @@ List of problems:
             + how to incorporate it
             + binarize SCR data and repeat HGF analysis
             + cross-modality correlation
+
     ii. HGF: fancy analysis (biased response model)
         - code up response model of variable bias
         - simulate some data and scrutinize it
@@ -52,7 +34,5 @@ List of problems:
 
 
 
-Cash:
-Billy - 8 Franken
 
 
