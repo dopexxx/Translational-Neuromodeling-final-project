@@ -22,6 +22,7 @@ ID = 16;
 
 load(['data/recordings/gsr_',int2str(ID),'.mat'])
 load(['data/behav/subject_',int2str(ID),'.mat'])
+load('data/metadata.mat')
 subject.gsr = struct();
 subject.gsr.raw = struct();
 subject.gsr.raw.values = scr_data(1,:);
@@ -131,9 +132,13 @@ for k = 1:length(subject.behav.raw.stim_onsets)
     aversive_resp(k,:) = subject.gsr.values(aversive_ind-resp_onset ...
         /sample_dist : aversive_ind+resp_offset/sample_dist);
 end
-
-subject.gsr.neutral_mean_resp = mean(neutral_resp,1);
-subject.gsr.aversive_mean_resp = mean(aversive_resp,1);
+%subject.gsr.neutral_sound_resp = mean(neutral_resp,1);
+%subject.gsr.aversive_sound_resp = mean(aversive_resp,1);
+rat_stim = mean(metadata.stimuli);
+subject.gsr.neutral_sound_resp = 1/rat_stim * mean(neutral_resp.*metadata.stimuli,1);
+subject.gsr.aversive_sound_resp = 1/rat_stim * mean(aversive_resp.*metadata.stimuli,1);
+subject.gsr.neutral_no_sound_resp = 1/(1-rat_stim) * mean(neutral_resp.*~metadata.stimuli,1);
+subject.gsr.aversive_no_sound_resp = 1/(1-rat_stim) * mean(aversive_resp.*~metadata.stimuli,1);
 
 
 
@@ -178,6 +183,7 @@ subject.gsr.psth.aversive = bins_aversive/length(subject.behav.raw.responses);
 % Look into other GSR features
 % Function plotting all the results
 % Rename files and delete doubles
+% Mean response -> Dot product with sound vectors!
 
 % gsr_plotting(); 
 
