@@ -49,5 +49,5 @@ sample_dist = (1000/subject.gsr.frequency)/1000;
 plot(subject.gsr.psth.borders(1):sample_dist:subject.gsr.psth.borders(2),...
     subject.gsr.aversive_sound_resp,'-o','color',niceBlue);hold on;
 plot(subject.gsr.psth.borders(1):sample_dist:subject.gsr.psth.borders(2),...
-    subject.gsr.aversive_no_sound_resp,'-o','color',niceRed)
+    subject.gsr.aversive_no_sound_respx`,'-o','color',niceRed)
 xlabel("secounds"); title("Mean response to aversive sound")

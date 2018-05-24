@@ -1,3 +1,4 @@
+disp(12)
 fol_name = 'data/behav_raw';
 all = dir(strcat(fol_name,'/*.mat'));
 for k = 1:length(all)
