@@ -1,4 +1,4 @@
-function subject = gsr_pipeline(ID)
+%function subject = gsr_pipeline(ID)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   This function executes an analytical pipeline for the GSR data of a 
 %   participant.
@@ -13,55 +13,63 @@ function subject = gsr_pipeline(ID)
 %
 %       Jannis Born, May 2018
 
-
+clear;
 % subject.behav.
 % subject.gsr.
 % subject.stats.
 % subject.hgf.
-
+ID = 16;
 
 load(['data/recordings/gsr_',int2str(ID),'.mat'])
-%load(['data/recordings/subject_',int2str(ID),'.mat'])
+load(['data/behav/subject_',int2str(ID),'.mat'])
 subject.gsr = struct();
-subject.gsr.raw_data = gsr_data;
+subject.gsr.raw = struct();
+subject.gsr.raw.values = scr_data(1,:);
+subject.gsr.raw.rel_times = scr_data(2,:);
+subject.gsr.raw.abs_times = scr_data(3:5,:);
+
+% Set some hyperparameter
+% Time differences between recording machines
+subject.time_delta = 0;
+% GSR final frequency (in Hertz)
+subject.gsr.frequency = 50; 
+% Size of median filter window (to extract SCR from GSR, in ms)
+subject.gsr.filter_window = 10;
 
 % Let us first synchronize the time stamps from GSR and behavioral data
 % and convert timings to relative values.
 
-% The difference between the two clocks used to record the behavioral and
-% gsr data (when 2 separate machines were used)
-subject.time_delta = 0;
-
-% 1) Define 1 second before the first sound as a RELATIVE time of 0
-t = squeeze(subject.stim_onsets(1,1,:))
-t(3) = t(3) - 1; % baseline is 1 sec before first sound.
+% 1) Define 10 second before the first sound as a RELATIVE time of 0
+t = squeeze(subject.behav.raw.stim_onsets(1,1,:));
+t(3) = t(3) - 10; % baseline is 1 sec before first sound.
 if t(3) < 0
     t(2) = t(2) - 1; % if second underflow, reduce minutes
     if t(2) < 0
         t(1) = t(1) - 1; % if minute underflow, reduce hours
         if t(1) < 0
-            error("Houston, we have a problem, s.b. made an overnight experiment");
+            error(['Houston, we have a problem, s.b. made an '...
+                'overnight experiment']);
         end
     end 
 end
-subject.behav.time_onset = t;
+subject.time_onset = t;
 
 
 % 2) Convert absolute into relative times
-subject.behav.relative_times = zeros(size(subject.stim_onsets));
-for k = 1:length(subject.relative_times)
-    subject.behav.relative_times(1,k,:) = ...
-        time_abs_to_rel(squeeze(subject.stim_onsets(1,k,:)), subject.time_onset);
+subject.behav.relative_times = zeros(size(subject.behav.raw.responses));
+for k = 1:length(subject.behav.relative_times)
+    subject.behav.relative_times(1,k) = time_abs_to_rel(squeeze(...
+        subject.behav.raw.stim_onsets(1,k,:)), subject.time_onset);
     
-    subject.behav.relative_times(2,k,:) = ...
-        time_abs_to_rel(squeeze(subject.stim_onsets(2,k,:)), subject.time_onset);
+    subject.behav.relative_times(2,k) = time_abs_to_rel(squeeze(...
+        subject.behav.raw.stim_onsets(2,k,:)), subject.time_onset);
 end 
 
 % 3) 4) Convert SCR times to relative values and add timedelta
-subject.gsr.raw_relative_times = zeros(length(scr_data));
+raw_rel_times = zeros(length(scr_data),1);
 for k = 1:length(scr_data)
-    t = time_abs_to_rel(scr_data(3:5), subject.behav.time_onset);
-    subject.gsr.raw_relative_times(k) = t+timedelta;
+    t = time_abs_to_rel(scr_data(3:5,k), subject.time_onset);
+    raw_rel_times(k) = t+subject.time_delta;
 end
 
 
@@ -69,125 +77,108 @@ end
 % GSR PREPROCESSING
 
 % 1) Remove time points before the relative time 0
-subject.gsr.raw_relative_times = subject.raw_relative_times(...
-    subject.raw_relative_times~=-1+timedelta);
-subject.gsr.values = scr_data(1,subject.raw_relative_times~=-1+timedelta);
+raw_rel_times = raw_rel_times(raw_rel_times~=-1+subject.time_delta);
+values = scr_data(1,raw_rel_times~=-1+subject.time_delta)';
+
+% 2) Remove the times from 20 sec after the last sound
+time_offset = subject.behav.relative_times(end,end) + 20;
+ind_last = 1;
+while raw_rel_times(ind_last) < time_offset
+    ind_last = ind_last + 1;
+end
+raw_rel_times(ind_last+1:end) = [];
+values(ind_last+1:end) = [];
 
 % Linear interpolation (Nearest Neighbor) in order to have the data sampled
-% equidistantly.
-interp1(x,v,xq,'nearest');
+% equidistantly. Interpolated signal will be downsampled from ca. 65 Hz to
+% exactly 50 Hz
+sample_dist =  (1000/subject.gsr.frequency) / 1000;
+subject.gsr.timings = 0:sample_dist:raw_rel_times(end); 
+values = interp1(raw_rel_times,values,subject.gsr.timings,'nearest');
+values(1)=[];subject.gsr.timings(1)=[];
 
-
-
-
+% Final preprocessing step:
 % Remove tonic component in signal (median filter)
-ind = 1;
-while subject.gsr.relative_times(ind) < 4000
-    ind = ind + 1;
+window_size = subject.gsr.filter_window/sample_dist; % 
+subject.gsr.values = zeros(length(values)-window_size,1);
+for k = 1:length(subject.gsr.values)
+    subject.gsr.values(k) = median(values(k:k+window_size));
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Now the analysis can begin.
+% We look at 
+%   1) The mean median-filtered SCR response for both blocks (neutral/aversive)
+%   2) The PSTH of both blocks
+
+% defines window of interest for 1) and 2)
+resp_onset = 1;  % 1000ms before stimulus
+resp_offset = 3.5; % to 3500ms after stimulus
+
+% 1) Collect all response windows and average
+neutral_resp = zeros(length(subject.behav.raw.stim_onsets),...
+    length(-1*resp_onset:sample_dist:resp_offset));
+aversive_resp = zeros(size(neutral_resp));
+
+for k = 1:length(subject.behav.raw.stim_onsets)
+    [t,neutral_ind] = min(abs(subject.behav.relative_times(1,k) - ...
+        subject.gsr.timings));
+    [t,aversive_ind] = min(abs(subject.behav.relative_times(2,k) - ...
+        subject.gsr.timings));
+    neutral_resp(k,:) = subject.gsr.values(neutral_ind-resp_onset ...
+        /sample_dist : neutral_ind+resp_offset/sample_dist);
+    aversive_resp(k,:) = subject.gsr.values(aversive_ind-resp_onset ...
+        /sample_dist : aversive_ind+resp_offset/sample_dist);
+end
+
+subject.gsr.neutral_mean_resp = mean(neutral_resp,1);
+subject.gsr.aversive_mean_resp = mean(aversive_resp,1);
 
 
 
-% Step 1: Downsampling:
-% The data was recorded with a sampling frequency of ca. 65 Hz
-% We downsample it to 10 Hz e.g. via NN interpolation (?) %
-%TODO
-
-% Step 2: Binarize signal.
-% Can be done either with raw or with preprocessed data.
-subject.gsr.bin_raw = subject.gsr.raw_data(1,:) > mean(subject.gsr.raw_data(1,:));
-
-%subject.gsr.bin = subject.gsr TODO
-
-
-% Step 3: Compute PSTH
+% 2) Compute PSTH, i.e. binarize signal
 subject.gsr.psth = struct();
+subject.gsr.bin_values = subject.gsr.values > mean(subject.gsr.values);
+
 
 % The borders for the PSTH w.r.t the event and the density of the bins 
-% both in ms
-borders = [-1000, 3500];
-bin_size = 100;
-subject.gsr.psth.borders = borders;
+bin_size = 0.1;
+subject.gsr.psth.borders = [-1*resp_onset, resp_offset];
 subject.gsr.psth.bin_size = bin_size;
 
-%% TIME CONVERSION & SYNCHRONIZATION
-% 1) Define offset in relative values (t=0)
-% 2) Convert behavioral timestamps
-% 3) Convert SCR timesteps and discard t<0 (scr starts before behavior)
-% 4) Add timedelta in order to synchronize
 
-
-
-    
-
-% For every trial (in both blocks) find the indices of the first relevant
-% recording (1000ms prior to tone) and last one (2500ms after tone)
-trial_borders_neutral = zeros(2,length(subject.responses));
-trial_borders_aversive = zeros(2,length(subject.responses));
-ind_n = 1;
-ind_a = 1;
-for k = 1:length(subject.responses)
-    stim_onset_n = squeeze(subject.stim_onsets(1,k,:)); % time 0
-    stim_onset_a = squeeze(subject.stim_onsets(2,k,:)); 
-    
-    stim_onset_n = synchronize(stim_onset_n, subject.time_delta);
-    stim_onset_a = synchronize(stim_onset_a, subject.time_delta);
-    
-    % Neutral
-    while subejct.gsr.hours(ind_n) ~= stim_onset_n(1) % Match hour 
-        ind_n = ind_n + 1;
-    end
-    while subject.gsr.mins(ind_n) ~= stim_onset_n(2) % Match minute
-        ind_n = ind_n + 1;
-    end
-    while subject.gsr.secs(ind_n) ~= stim_onset_n(3) % Match second
-        ind_n = ind_n + 1;
-    end
-    
-    % Aversive
-    while subejct.gsr.hours(ind_a) ~= stim_onset_a(1) % Match hour 
-        ind_a = ind_a + 1;
-    end
-    while subject.gsr.mins(ind_a) ~= stim_onset_a(2) % Match minute
-        ind_a = ind_a + 1;
-    end
-    while subject.gsr.secs(ind_a) ~= stim_onset_a(3) % Match second
-        ind_a = ind_a + 1;
-    end
-    
-    
-
-bins_neutral = zeros(2,length(borders(1):bin_size:borders(2)));
-% First row are just the relative timings
-bins_neutral(1,:) = borders(1):bin_size:borders(2); 
+bins_neutral = zeros(length(-1*resp_onset:bin_size:resp_offset),1);
 bins_aversive = bins_neutral;
 
 % Compute value of every bin
-for k = 1:length(bins)
+for k = 1:length(subject.behav.raw.stim_onsets)
     
-    % Count over all trials
-    for n = 1:length(subject.responses)
-        
-        stim_onset = squeeze(subject.stim_onsets(1,k,:)); % time 0
-        
-        % Find the 
-        l = 1
-        while 
-            
-        
-        
-        
-    end
+    [t,neutral_ind] = min(abs(subject.behav.relative_times(1,k) - ...
+        subject.gsr.timings));
+    [t,aversive_ind] = min(abs(subject.behav.relative_times(2,k) - ...
+        subject.gsr.timings));
     
-    
+    bins_neutral = bins_neutral + subject.gsr.bin_values(neutral_ind-...
+        resp_onset/bin_size : neutral_ind+resp_offset/bin_size);
+    bins_aversive = bins_aversive + subject.gsr.bin_values(aversive_ind-...
+        resp_onset/bin_size : aversive_ind+resp_offset/bin_size);
 end
+        
+subject.gsr.psth.neutral = bins_neutral/length(subject.behav.raw.responses);
+subject.gsr.psth.aversive = bins_aversive/length(subject.behav.raw.responses);
+%end
 
 
+%% TODO:
+% Think about a better way of preprocessing/filtering
+% Make a more clever binarization than the current binarization
+% Get one binary value PER TRIAL (by averaging over the window and > 0.5)
+% -> Feed into GSR
+% Look into other GSR features
+% Function plotting all the results
+% Rename files and delete doubles
 
-
-
-end
-
+% gsr_plotting(); 
 
 

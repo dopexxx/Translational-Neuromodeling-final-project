@@ -36,16 +36,16 @@ else
 
     % min diff
     if baseline(2) <= abs_time(2)
-        rel_min = baseline(2) - abs_time(2);
+        rel_min = abs_time(2) - baseline(2);
     else
         rel_min = (60-baseline(2)) + abs_time(2);
         baseline(1) = baseline(1) + 1; % correct hour  
     end
 
-    if baseline(1) ~= asb_time(1)
+    if baseline(1) ~= abs_time(1)
         error("Did this experiment really take longer than one hour?")
     end
 
-    rel_time = rel_min*1000 + rel_ms;
+    rel_time = rel_min*60 + rel_ms;
 
 end
