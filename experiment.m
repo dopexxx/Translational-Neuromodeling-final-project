@@ -168,7 +168,7 @@ disp("Second block starts in 5 seconds...")
 pause(1)
 [fig,ax] = figure2_imshow(metadata.fixation_cross,[]);
 pause(4);
-clock
+clocknn
 
 for k = 1:metadata.trials
     % Show the visual cue
