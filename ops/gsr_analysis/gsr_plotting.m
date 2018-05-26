@@ -24,6 +24,12 @@ figure
 plot(subject.gsr.raw.rel_times, subject.gsr.raw.values,'-o','color',niceGreen);
 ylim([0 1000]);xlabel("secounds"); title("Raw data")
 
+%%
+figure
+plot(1:length(subject.gsr.values),subject.gsr.values,'-o','color',niceGreen);
+ylim([0 1000]);xlabel("secounds");
+
+%%
 figure
 sample_dist = (1000/subject.gsr.frequency)/1000;
 plot(subject.gsr.psth.borders(1):sample_dist:subject.gsr.psth.borders(2),...
@@ -49,5 +55,5 @@ sample_dist = (1000/subject.gsr.frequency)/1000;
 plot(subject.gsr.psth.borders(1):sample_dist:subject.gsr.psth.borders(2),...
     subject.gsr.aversive_sound_resp,'-o','color',niceBlue);hold on;
 plot(subject.gsr.psth.borders(1):sample_dist:subject.gsr.psth.borders(2),...
-    subject.gsr.aversive_no_sound_respx`,'-o','color',niceRed)
+    subject.gsr.aversive_no_sound_resp,'-o','color',niceRed)
 xlabel("secounds"); title("Mean response to aversive sound")
