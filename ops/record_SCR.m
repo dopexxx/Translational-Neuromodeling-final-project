@@ -74,7 +74,13 @@ xlim([0 max(scr_data(2,:))])
 
 filename = ['data/recordings/','SCR','_day_',num2str(tnow(3)),'_h_',...
     num2str(tnow(4)),'_min_',num2str(tnow(5)),'.mat'];
-save(filename,'scr_data')
-fprintf('\nFile successfully saved as %s',filename)
+try 
+    save(filename,'scr_data')
+    fprintf('\nFile successfully saved as %s',filename)
+catch
+    save('recording.mat','scr_data')
+    fprintf('\nFile successfully saved as recording.mat')
+end
+
 
 end

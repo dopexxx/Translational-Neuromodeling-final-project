@@ -163,12 +163,12 @@ disp("Please fill out the questionnaire and hand it over to the experimentor");
 
 %% Second block
 disp('Second block is preparing...')
-pause(3)
+pause(3)mmnn
 disp("Second block starts in 5 seconds...")
 pause(1)
 [fig,ax] = figure2_imshow(metadata.fixation_cross,[]);
 pause(4);
-clocknn
+clock
 
 for k = 1:metadata.trials
     % Show the visual cue
