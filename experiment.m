@@ -201,12 +201,11 @@ for k = 1:metadata.trials
 end
 
 close all;
+subject = compute_score(subject);
+subject.scores
 save(['data/recordings/subject_',int2str(subject.ID),'.mat'],'subject'); 
 disp("You have reached the end of the experiment.");disp('');
 disp("Pick up your well deserved sweeeeeets");
-
-subject = compute_score(subject);
-subject.scores
 money = (subject.scores(1,1) * 6) + (subject.scores(2,1)*6);
 
 disp(['You will get ',num2str(money),' Franks!!! Congratz!'])

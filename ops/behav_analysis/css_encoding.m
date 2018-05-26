@@ -1,6 +1,6 @@
 fol_name = 'data/behav';
 all = dir(strcat(fol_name,'/*.mat'));
-load('metadata.mat');
+load('data/metadata.mat');
 for k = 1:length(all)
     load(strcat(fol_name,'/',all(k).name));
     css_input = metadata.stimuli==metadata.cues;

@@ -5,7 +5,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function hgfparams = single_subject_HGF_analysis(fol_name, name)
 % Load data
-load(strcat(fol_name,'/',name));
+load(strcat(fol_name,'/subject_',name));
 load('metadata.mat');
 
 % Generate cue-stimulus contingency corrected input/output sequences
