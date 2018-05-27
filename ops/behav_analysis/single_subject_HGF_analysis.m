@@ -3,16 +3,17 @@
 % 
 % Lukas Vogelsang, May 2018
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function hgfparams = single_subject_HGF_analysis(fol_name, name)
+function hgfparams = single_subject_HGF_analysis(fol_name, name,default_config)
 % Load data
 load(strcat(fol_name,'/',name));
 load('metadata.mat');
 
 % Set config file for perceptual model
-
-%config = 'tapas_hgf_binary_config'; % --> default
-config = 'tapas_hgf_binary_LJM_config';
-
+if default_config   
+    config = 'tapas_hgf_binary_config'; % --> default
+else
+    config = 'tapas_hgf_binary_LJM_config';
+end
 % Generate cue-stimulus contingency corrected input/output sequences
 HGF_input_seq = subject.behav.css.input;
 HGF_output_seq_neutral = subject.behav.css.response_neutral;
@@ -71,8 +72,11 @@ subject.hgf.params_bo = params_bo;
 subject.hgf.sim_bo = sim_bo;
 subject.hgf.configfile = config;
 
-
-save(strcat('data/behav_analyzed_hgf_newpriors/',name), 'subject');
+if default_config
+    save(strcat('data/behav_analyzed_hgf/',name), 'subject');
+else 
+    save(strcat('data/behav_analyzed_hgf_newpriors/',name), 'subject');
+end
 
 
 

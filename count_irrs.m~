@@ -1,0 +1,21 @@
+%% Count irregular trials as rejection criterion
+
+fol_name = 'data/behav_analyzed_hgf_newpriors';
+all = dir(strcat(fol_name,'/*.mat'));
+irrs = zeros(4,length(all));
+criterion = 0.1;
+
+for k = 1:length(all)
+    load(strcat(fol_name,'/',all(k).name));
+    irrs(1,k) = subject.ID;
+    irrs(2,k) = length(subject.hgf.params_neutral.irr);
+    irrs(3,k) = length(subject.hgf.params_aversive.irr);
+    irrs(4,k) = sum(irrs(2:3,k))/300;
+    if irrs(4,k) > criterion
+        save('s'
+    end
+end
+
+
+
+

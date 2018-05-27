@@ -1,4 +1,4 @@
-fol_name = 'data/behav';
+fol_name = 'data/behav_w_css';
 all = dir(strcat(fol_name,'/*.mat'));
 load('data/metadata.mat');
 for k = 1:length(all)
@@ -11,5 +11,6 @@ for k = 1:length(all)
     subject.behav.css.input = css_input;
     subject.behav.css.response_neutral = css_response_neutral*1;
     subject.behav.css.response_aversive = css_response_aversive*1;
-    save(strcat('data/behav/',all(k).name), 'subject');
+    save(strcat('data/behav_w_css/',all(k).name), 'subject');
 end
+disp('Done recoding the trials in terms of cue-stimulus-contingenies.')

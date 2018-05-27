@@ -1,4 +1,9 @@
-fol_name = 'data/behav_analyzed_hgf_newpriors';
+function parameter_plot(default_config)
+if default_config
+    fol_name = 'data/behav_analyzed_hgf';
+else
+    fol_name = 'data/behav_analyzed_hgf_newpriors';
+end
 all = dir(strcat(fol_name,'/*.mat'));
 om2 = zeros(2,length(all)); om3 = zeros(2,length(all)); zeta = zeros(2,length(all));
 
@@ -11,6 +16,8 @@ for k = 1:length(all)
     zeta(1,k) = subject.hgf.params_neutral.p_obs.ze;
     zeta(2,k) = subject.hgf.params_aversive.p_obs.ze;
 end
+
+figure;
 subplot(1,3,1);
 plot(1,om2(1,:),'o','Linewidth',1);
 hold on;
@@ -38,3 +45,4 @@ xlim([.5 2.5])
 ax = gca;
 %ax.XTickLabels={'Neutral','Aversive'};
 title('\zeta');
+end

@@ -1,5 +1,6 @@
-fol_name = 'data/behav_analyzed';
+fol_name = 'data/behav_analyzed_perf';
 all = dir(strcat(fol_name,'/*.mat'));
+figure;
 for k = 1:length(all)
     load(strcat(fol_name,'/',all(k).name));
     subplot(length(all),2,k*2-1);
