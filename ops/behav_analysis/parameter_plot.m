@@ -1,4 +1,4 @@
-fol_name = 'data/behav_analyzed_hgf';
+fol_name = 'data/behav_analyzed_hgf_newpriors';
 all = dir(strcat(fol_name,'/*.mat'));
 om2 = zeros(2,length(all)); om3 = zeros(2,length(all)); zeta = zeros(2,length(all));
 

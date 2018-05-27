@@ -53,8 +53,8 @@ k = 4
     disp(subject.scores)
 
 
-%% Manual trace calculation
-fol_name = 'data/behav_analyzed_hgf';
+%% Manual trace calculation ... pretty
+fol_name = 'data/behav_analyzed_hgf_newpriors';
 all = dir(strcat(fol_name,'/*.mat'));
 subplot(2,2,3);
 for k = 1:length(all)
@@ -70,7 +70,7 @@ for k = 1:length(all)
     hold on;
 end
 title('\omega_3')
-ylim([.99 1.01])
+%ylim([.99 1.01])
 subplot(2,2,4);
 for k = 1:length(all)
     load(strcat(fol_name,'/',all(k).name));
@@ -78,7 +78,7 @@ for k = 1:length(all)
     hold on;
 end
 title('\omega_2')
-ylim([-1 3])
+%ylim([-1 3])
 subplot(2,2,2);
 for k = 1:length(all)
     load(strcat(fol_name,'/',all(k).name));
@@ -86,7 +86,7 @@ for k = 1:length(all)
     hold on;
 end
 title('\omega_3')
-ylim([.99 1.01])
+%ylim([.99 1.01])
 %% Both plots
 fol_name = 'data/behav_analyzed_hgf';
 all = dir(strcat(fol_name,'/*.mat'));

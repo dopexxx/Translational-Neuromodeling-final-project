@@ -5,8 +5,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function hgfparams = single_subject_HGF_analysis(fol_name, name)
 % Load data
-load(strcat(fol_name,'/subject_',name));
+load(strcat(fol_name,'/',name));
 load('metadata.mat');
+
+% Set config file for perceptual model
+
+%config = 'tapas_hgf_binary_config'; % --> default
+config = 'tapas_hgf_binary_LJM_config';
 
 % Generate cue-stimulus contingency corrected input/output sequences
 HGF_input_seq = subject.behav.css.input;
@@ -18,7 +23,7 @@ HGF_output_seq_aversive = subject.behav.css.response_aversive;
 % Find Bayes optimal perceptual parameter values for dataset under binary HGF model
 params_bo = tapas_fitModel([],... % observations; here: empty.
                          HGF_input_seq,... % input
-                         'tapas_hgf_binary_config',... % perceptual model
+                         config,... % perceptual model
                          'tapas_bayes_optimal_binary_config',... % pseudo-response model
                          'tapas_quasinewton_optim_config'); % opt. algo 
                      
@@ -33,7 +38,7 @@ sim_bo = tapas_simModel(HGF_input_seq,... % data
 % Fit HGF based on participant data 
 params_neutral = tapas_fitModel(HGF_output_seq_neutral,... % observations; here: empty.
                          HGF_input_seq,... % input
-                         'tapas_hgf_binary_config',... % perceptual model
+                         config,... % perceptual model
                          'tapas_unitsq_sgm_config',... % response model
                          'tapas_quasinewton_optim_config'); % opt. algo    
 % Simulate responses
@@ -47,7 +52,7 @@ sim_neutral = tapas_simModel(HGF_input_seq,... % data
 % Fit HGF based on participant data 
 params_aversive = tapas_fitModel(HGF_output_seq_aversive,... % observations; here: empty.
                          HGF_input_seq,... % input
-                         'tapas_hgf_binary_config',... % perceptual model
+                         config,... % perceptual model
                          'tapas_unitsq_sgm_config',... % response model
                          'tapas_quasinewton_optim_config'); % opt. algo    
 
@@ -64,13 +69,15 @@ subject.hgf.sim_neutral = sim_neutral;
 subject.hgf.sim_aversive = sim_aversive; 
 subject.hgf.params_bo = params_bo;
 subject.hgf.sim_bo = sim_bo;
+subject.hgf.configfile = config;
 
-save(strcat('data/behav_analyzed_hgf/',name), 'subject');
+
+save(strcat('data/behav_analyzed_hgf_newpriors/',name), 'subject');
 
 
 
 %{                 
-% die halt alle plotten später
+% die halt alle plotten spï¿½ter
 
 % 
 
