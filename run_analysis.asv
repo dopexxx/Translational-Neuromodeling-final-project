@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ANALYSIS
+% Main file for running analyses
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% (A) DATA ORGANIZATION
@@ -45,24 +45,40 @@ plot_neutral_aversive_bo_all(default_config);
 %% Plot distribution of differences in mu_2 traces aversive-neutral
 plot_diff_distribution(default_config);
 
-%% Extract HGF input sequence
-load(all(1).name); HGF_input_seq = subject.behav.css.input;
 
-
-%% (D) Alpha model% not pretty yet. 
-%% Easy exploration: HGF vs Alpha sigm(mu_2) = mu_1 plot
+%% (D) Alpha model
+%% HGF vs Alpha sigm(mu_2) = mu_1 plot
 % Specify: [subject_folder_id, prior for alphamodel, alpha for alphamodel)
 k = 7; prior = 7.5; alpha_param = 0.68; 
 figure; plot_hgf_vs_alphamodel(default_config, k, prior, 0.5, alpha_param);
 
-%% Synthetic data
+%% Extract HGF input sq
+load(all(1).name);
+HGF_input_seq = subject.behav.css.input;
+
+%%
 sim_testing = tapas_simModel(HGF_input_seq,... % data
                      'tapas_hgf_binary',... % perceptual model
                      [NaN 0 1 NaN 1 1 NaN 0 0 1 1 NaN -3 -6],... % NaN, -2.5, -6 = omegas
                      'tapas_unitsq_sgm',... % response model: unit square sigmoid
                      5); % zeta parameter    
 
-%% Manual optimization experiment: modelling subjects
+%%
+plot(sigm(sim_testing.traj.mu(:,2)));
+ylim([0 1]);
+optim_surface = zeros(96,96);
+hold on
+for prior = [6.2105]
+    for l = [0.7268]
+        a = simulate_learning( HGF_input_seq, prior, 0.5, l);
+        plot(a);
+    hold on;
+    end
+end
+hold off;
+legend('HGF','Alpha')
+
+%% DO THIS 96x96 times: ohne m; direct optimization ___ GOOOD
 if default_config
     fol_name = 'data/behav_analyzed_hgf';
 else
@@ -83,24 +99,7 @@ for prior = linspace(1,4,96) % prior
         a = simulate_learning( HGF_input_seq, prior, l);
         optim_surface(p_c,l_c) = 150- sum(subj_response_neutral'==round(a));
     end
-end                 
-                                
-%%
-plot(sigm(sim_testing.traj.mu(:,2)));
-ylim([0 1]);
-optim_surface = zeros(96,96);
-hold on
-for prior = [6.2105]
-    for l = [0.7268]
-        a = simulate_learning( HGF_input_seq, prior, 0.5, l);
-        plot(a);
-    hold on;
-    end
 end
-hold off;
-legend('HGF','Alpha')
-
-
 
 %% ______ GOOD
 figure
