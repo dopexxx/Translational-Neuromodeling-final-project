@@ -7,10 +7,18 @@ function c = tapas_hgf_binary_LJM_config
 % What we modified:
 % Omega priors:    om3: sigma = -10 (log space)
 %                  om2: sigma = 256 
+%                  ka2: mu -100 (log space)
 % 
-% Why: To allow for more heterogeneity in omega2 and to fix omega3.
-%                  
+% Why: To allow for more heterogeneity in omega2 and to fix omega3 and to
+% to disentangle layers 2 and 3 (hack to make pseudo-2-layer HGF).
+%  
+% Omegas
+% c.ommu = [NaN,  -3,  -6];
+% c.omsa = [NaN, 4^5, 0];
 %
+% Kappas
+% c.logkamu = [log(1), -100];
+% c.logkasa = [     0,      0];
 %
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
