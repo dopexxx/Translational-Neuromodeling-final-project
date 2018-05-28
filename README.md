@@ -59,7 +59,7 @@ List of problems:
 - Reject subjects - Function that reject subject according to some definition. Mehr als 10% NaNs, speichert subject als rejected. - JANNIS
 - Questionnaire auswerten - MO 
     - Performance korrelieren mit subjektiver Performance und how do you feel today?
-    - Angst korrelieren mit Differenz der HGF parameter für neutrales und aversives Setup
+    - Angst korrelieren mit Differenz der HGF parameter für neutrales und aversives Setu
 
 
 - Alpha Fitting - LUKE
@@ -67,7 +67,7 @@ List of problems:
     - Relation zu omega2 (korrelieren)
     - Falls gute Ergebnisse - BMS Alpha Model vs 2 HGFs
     - Compute runtimes
-    - Equality to 2 level HGF?
+    - Equality to 2 level HGF??
 
 
 - Massage HGF Parameter         MO
@@ -104,4 +104,6 @@ List of problems:
 
 
 DEMO inspiration 
+
+NEWTON RAPHSON METHOD
 
