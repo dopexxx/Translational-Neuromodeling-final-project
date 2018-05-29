@@ -18,10 +18,10 @@ clear;
 % subject.gsr.
 % subject.stats.
 % subject.hgf.
-ID = 16;
+ID = 12;
 
 load(['data/recordings/gsr_',int2str(ID),'.mat'])
-load(['data/behav/subject_',int2str(ID),'.mat'])
+load(['data/behav_analyzed_hgf/subject_',int2str(ID),'.mat'])
 load('data/metadata.mat')
 subject.gsr = struct();
 subject.gsr.raw = struct();
