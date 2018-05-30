@@ -5,9 +5,9 @@ function c = tapas_hgf_binary_LJM_config
 %
 %
 % What we modified:
-% Omega priors:    om3: sigma = -10 (log space)
+% Omega priors:    om3: sigma = 0
 %                  om2: sigma = 256 
-%                  ka2: mu -100 (log space)
+%                  
 % 
 % Why: To allow for more heterogeneity in omega2 and to fix omega3 and to
 % to disentangle layers 2 and 3 (hack to make pseudo-2-layer HGF).
@@ -16,9 +16,7 @@ function c = tapas_hgf_binary_LJM_config
 % c.ommu = [NaN,  -3,  -6];
 % c.omsa = [NaN, 4^5, 0];
 %
-% Kappas
-% c.logkamu = [log(1), -100];
-% c.logkasa = [     0,      0];
+%
 %
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -73,7 +71,7 @@ c.logkasa = [     0,      0];
 % Format: row vector of length n_levels.
 % Undefined (therefore NaN) at the first level.
 c.ommu = [NaN,  -3,  -6];
-c.omsa = [NaN, 4^2, 0];
+c.omsa = [NaN, 4^3, 0];
 
 % Gather prior settings in vectors
 c.priormus = [
