@@ -56,7 +56,6 @@ List of problems:
     
 
 
-- Reject subjects - Function that reject subject according to some definition. Mehr als 10% NaNs, speichert subject als rejected. - JANNIS
 - Questionnaire auswerten - MO 
     - Performance korrelieren mit subjektiver Performance und how do you feel today?
     - Angst korrelieren mit Differenz der HGF parameter für neutrales und aversives Setu
@@ -91,16 +90,23 @@ List of problems:
 
 
 - GSR                       JANNIS
-    - cleanup - GSR files und methoden
-    - Daten für HGF vorbereiten     JANNIS
-        - Filtern, binärisieren und mean pro post stimulus time berechnen
-        - timings
-        - Sanity check: Ist das Signal höher wenn PE beobachtet wurde?
-    - PSTH
-    - Mean responses für neutral und aversiv
-    - subject.hgf.params_neutral.epsi -> Prediction errors pro trial 
-    - Korrelation von prediction error trace und prediction error aus GSR
-    - ID 12: GSR Laptop 20sec BEVOR behavioral daten.
+    - Korrelation von prediction error trace und prediction error aus GSR -> almost no correlation 
+    - Korrelation of PE trace (50% of trials with highest signal have PE) with performance vector -> almost no correlation
+    - Mean Plots: Plot wrong trials vs correct trials
+
+    -> 3 bins fur prediction error intensity und dann jeweils die responses plotten
+    -> Scores berechnen von gsr_resp
+    -> Andere mean plots berechnen
+
+Idea:Maybe responses backwards inferred from the prediction error encoded in the GSR signal give rise to a more accurate/less volatile/more BO/anyhow different HGF.
+
+Alpha Model - Model inversion:
+- Inverted the model to find the generative model that best explains the data
+- Show derivation
+- Did not find an analytical expression for alpha yet, since the mus and pis are vectors which are updated iteratively in the forward model and our math is not solid enough to find an analytical expression (if one exists)
+- But we use this equation to compute the gradient to fit the alphas. So far most of the error surfaces we looked at were convex, but some were not and then of course this method has all the drawbacks accompagnied by methods that find local instead of global minima
+- Plot error vs gradient and show error surface dependent also on the prior
+--> Slide machen. Alternative optimization methods open for ideas.
 
 
 DEMO inspiration 

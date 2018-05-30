@@ -48,19 +48,30 @@ plot_diff_distribution(default_config);
 %% Extract HGF input sequence
 load(all(1).name); HGF_input_seq = subject.behav.css.input;
 
+%% (D) GSR Analysis
+%gsr_analysis();
 
-%% (D) Alpha model% not pretty yet. 
+
+
+%% (E) Alpha model% not pretty yet. 
 %% Easy exploration: HGF vs Alpha sigm(mu_2) = mu_1 plot
 % Specify: [subject_folder_id, prior for alphamodel, alpha for alphamodel)
 k = 7; prior = 7.5; alpha_param = 0.68; 
 figure; plot_hgf_vs_alphamodel(default_config, k, prior, 0.5, alpha_param);
 
 %% Synthetic data
+
+load('subject_11.mat')
+HGF_input_seq =  subject.behav.css.input;
 sim_testing = tapas_simModel(HGF_input_seq,... % data
                      'tapas_hgf_binary',... % perceptual model
                      [NaN 0 1 NaN 1 1 NaN 0 0 1 1 NaN -3 -6],... % NaN, -2.5, -6 = omegas
                      'tapas_unitsq_sgm',... % response model: unit square sigmoid
-                     5); % zeta parameter    
+                     5); % zeta parameter   
+                 
+                 
+                 
+                 
 
 %% Manual optimization experiment: modelling subjects
 if default_config

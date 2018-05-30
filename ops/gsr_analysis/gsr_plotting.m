@@ -16,9 +16,43 @@
 niceBlue = [0 114/255 189/255];
 niceRed = [217/255 83/255 25/255];
 niceGreen =  [116/255 166/255 95/255];
-resp_onset = 1;  % 1000ms before stimulus
-resp_offset = 3.5; % to 3500ms after stimulus
-subject.gsr.psth.borders = [-1*resp_onset, resp_offset];
+
+
+ids = [11,12,13,16];
+raw = cell(4,1);
+post = cell(4,1);
+figure 
+for ind = 1:length(ids)
+    id = ids(ind);
+    load(['data/gsr_ledalab/subject_',num2str(id),'_post.mat']);
+    raw{ind} = data.conductance;
+    post{ind} = analysis.phasicData;
+    subplot(4,2,ind*2-1);
+    plot(data.conductance);
+    title(['Raw data subject ',num2str(id)]);
+    subplot(4,2,ind*2);
+    plot(analysis.phasicData);
+    title(['Phasic component subject ',num2str(id)]);
+end
+savefig('data/gsr_results/raw_post.fig');
+
+
+figure
+subplot(1,2,1);
+for ind = 1:4
+    plot(raw{ind}); hold on;
+    title('Raw data')
+end
+subplot(1,2,2);
+
+for ind = 1:4
+    plot(post{ind}); hold on;
+    title('Phasic component')
+end
+
+% resp_onset = 1;  % 1000ms before stimulus
+% resp_offset = 3.5; % to 3500ms after stimulus
+% subject.gsr.psth.borders = [-1*resp_onset, resp_offset];
 %%
 figure
 plot(subject.gsr.raw.rel_times, subject.gsr.raw.values,'-o','color',niceGreen);

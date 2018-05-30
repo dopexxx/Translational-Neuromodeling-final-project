@@ -10,9 +10,11 @@ load('metadata.mat');
 
 % Set config file for perceptual model
 if default_config   
-    config = 'tapas_hgf_binary_config'; % --> default
+    config_prc = 'tapas_hgf_binary_config'; % --> default
+    config_resp = 'tapas_unitsq_sgm_config';
 else
-    config = 'tapas_hgf_binary_LJM_config';
+    config_prc = 'tapas_hgf_binary_LJM_config';
+    config_resp = 'tapas_unitsq_sgm_config_LJM';
 end
 % Generate cue-stimulus contingency corrected input/output sequences
 HGF_input_seq = subject.behav.css.input;
@@ -24,7 +26,7 @@ HGF_output_seq_aversive = subject.behav.css.response_aversive;
 % Find Bayes optimal perceptual parameter values for dataset under binary HGF model
 params_bo = tapas_fitModel([],... % observations; here: empty.
                          HGF_input_seq,... % input
-                         config,... % perceptual model
+                         config_prc,... % perceptual model
                          'tapas_bayes_optimal_binary_config',... % pseudo-response model
                          'tapas_quasinewton_optim_config'); % opt. algo 
                      
@@ -39,8 +41,8 @@ sim_bo = tapas_simModel(HGF_input_seq,... % data
 % Fit HGF based on participant data 
 params_neutral = tapas_fitModel(HGF_output_seq_neutral,... % observations; here: empty.
                          HGF_input_seq,... % input
-                         config,... % perceptual model
-                         'tapas_unitsq_sgm_config',... % response model
+                         config_prc,... % perceptual model
+                         config_resp,... % response model
                          'tapas_quasinewton_optim_config'); % opt. algo    
 % Simulate responses
 sim_neutral = tapas_simModel(HGF_input_seq,... % data
@@ -53,8 +55,8 @@ sim_neutral = tapas_simModel(HGF_input_seq,... % data
 % Fit HGF based on participant data 
 params_aversive = tapas_fitModel(HGF_output_seq_aversive,... % observations; here: empty.
                          HGF_input_seq,... % input
-                         config,... % perceptual model
-                         'tapas_unitsq_sgm_config',... % response model
+                         config_prc,... % perceptual model
+                         config_resp,... % response model
                          'tapas_quasinewton_optim_config'); % opt. algo    
 
 % Simulate responses
@@ -70,7 +72,8 @@ subject.hgf.sim_neutral = sim_neutral;
 subject.hgf.sim_aversive = sim_aversive; 
 subject.hgf.params_bo = params_bo;
 subject.hgf.sim_bo = sim_bo;
-subject.hgf.configfile = config;
+subject.hgf.configfile_prc = config_prc;
+subject.hgf.configfile_resp = config_resp;
 
 if default_config
     save(strcat('data/behav_analyzed_hgf/',name), 'subject');

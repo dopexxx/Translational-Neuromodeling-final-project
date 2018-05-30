@@ -1,21 +1,30 @@
-function a = gsr_analysis()
+%function a = gsr_analysis()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% This function runs the GSR analysis pipeline on all subjects with valid
+% This function runs the GSR preprocessing pipeline on all subjects with valid
 % GSR data.
 %
 % Jannis Born, May 2018
 
-inds = [4,11,12,13,16];
+inds = [11,12,13,16];
 
-for k = inds
-    load(['data/recordings/gsr_',num2str(k),'.mat']);
-    load(['data/behav_analyzed_hgf/subject_',int2str(ID),'.mat'])
-    
+for ID = inds
+  
     % Run pipeline
-    subject = gsr_pipeline(scr_data,subject);
+    [subject,data] = gsr_preprocessing(ID);
     % Save data
-    save(['data/gsr_analyzed/subject',num2str(k),'.mat'],subject);
+    save(['data/gsr_ledalab/subject_',num2str(ID),'_raw.mat'],'data');
+    save(['data/gsr_raw/subject_',num2str(ID),'.mat'],'subject');
+    
+    % The final step of preprocessing was the Continuous Decomposition 
+    % Analysis (CDA) which was done in the LEDALAB GUI. This generated a 
+    % phasic component of identical length like the raw data. All analysis
+    % is performed based on that data.
+    
+    % Unfortunately, we had to cut the first 7 trials from subject 12 due
+    % to high noise level.
 
 end
+
+%end
 

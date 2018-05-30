@@ -73,7 +73,7 @@ c.logkasa = [     0,      0];
 % Format: row vector of length n_levels.
 % Undefined (therefore NaN) at the first level.
 c.ommu = [NaN,  -3,  -6];
-c.omsa = [NaN, 4^5, 0];
+c.omsa = [NaN, 4^2, 0];
 
 % Gather prior settings in vectors
 c.priormus = [
