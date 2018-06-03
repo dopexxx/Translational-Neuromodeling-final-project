@@ -66,7 +66,9 @@ for trial_ind = trial_onset:300
         ind = 150;
     end
     
-    if dot(trial_resp,can_corr) > dot(trial_resp, can_wrong)
+    if sqrt(sum((trial_resp-can_corr).^2)) < sqrt(sum((trial_resp-...
+            can_wrong).^2))
+    %if dot(trial_resp,can_corr) > dot(trial_resp, can_wrong)
         
         gsr_resp(trial_ind) = metadata.stimuli(ind);
     else
