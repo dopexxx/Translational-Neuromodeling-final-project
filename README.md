@@ -14,7 +14,7 @@ Intro, more detailed structure:
 2) What could such criteria look like? 
         + duh, brain anatomy (too high-dimensional, not very informative)
         + --> MODELING
-            / brain connectivity models (DCM) (examples, e.g, synaethesia)
+            / brain connectivity models (DCM) (examples, e.g, synaesthesia)
             / Bayesian Brain-based behavioral models: HGF (e.g., hierarchical 
               pred errors, autism?). Briefly explain HGF and prepare the reader for the alpha-model        
 3) What we will investigate
