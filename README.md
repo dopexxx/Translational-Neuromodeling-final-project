@@ -6,6 +6,22 @@ https://www.overleaf.com/16688233mcmbvnbfrpvc#/63995849/
 
 TODO: Finish the report. That means:
 
+Intro, more detailed structure:
+
+1) Big picture: comp psychiatry state today and how it 'should' be. 
+    - today: symptom based: biased, subjective diagnosis criteria
+    - we should strive for objective, quantitative diagnostic tools
+2) What could such criteria look like? 
+        + duh, brain anatomy (too high-dimensional, not very informative)
+        + --> MODELING
+            / brain connectivity models (DCM) (examples, e.g, synaethesia)
+            / Bayesian Brain-based behavioral models: HGF (e.g., hierarchical 
+              pred errors, autism?). Briefly explain HGF and prepare the reader for the alpha-model        
+3) What we will investigate
+    - Sandra looked at neurophysiological correlates of computational quantities; we will first look for *peripheral* or *autonomous* correlates in the context of a
+    - Behavioral experiment, where the subjects have to gauge the hidden structure of a probabilistic system. The task was designed to also allow us to answer another very pertinent question: How do neutral vs. aversive stimuli bias behavior?
+    - To this end, we will not only compare HGF params, but also try to render them more accessible by casting omega2 in terms of twoI
+
 
 1) Summarize what we already did:
     1) Intro section
