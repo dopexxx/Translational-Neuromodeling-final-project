@@ -83,7 +83,7 @@ for i = 1:18
 end
 
 %% Plot
-usable_resp = quest.resp(available,1:4)
+usable_resp = quest.resp(available,2:4)
 usable_scores = scores(available,:) % only look at mean score
 
 data = [usable_resp(:,3) usable_scores(:,3)]
@@ -97,18 +97,9 @@ corr_plot(usable_resp(:,3)*10,usable_scores(:,3)*100,'Subjective performance (%)
 
 % Get omegas, calculate differences
 oms = parameter_plot(default_config);
-%%
-[~,idx] = sort(oms(3,:));
-oms_sorted = oms(:,idx)
+[~,idx] = sort(om(:,1));
 
-% delete all omegas where we dont have questionnaire answers
-oms_sorted(:,8)=[]
-oms_sorted(:,end-1)=[]
-
-oms_d = oms_sorted(2,:)-oms_sorted(1,:);
-
-corr_plot(oms_d',usable_resp(:,4)*10,'\Delta \omega_{2}',...
-    'Subjective anxiety-proneness')
+oms_d = oms(2,:)-oms(1,:);
 
 
 

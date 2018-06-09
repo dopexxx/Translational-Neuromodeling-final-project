@@ -1,16 +1,17 @@
-function parameter_plot(default_config)
+function om2 = parameter_plot(default_config)
 if default_config
     fol_name = 'data/behav_analyzed_hgf';
 else
     fol_name = 'data/behav_analyzed_hgf_newpriors';
 end
 all = dir(strcat(fol_name,'/*.mat'));
-om2 = zeros(2,length(all)); om3 = zeros(2,length(all)); zeta = zeros(2,length(all));
+om2 = zeros(3,length(all)); om3 = zeros(2,length(all)); zeta = zeros(2,length(all));
 
 for k = 1:length(all)
     load(strcat(fol_name,'/',all(k).name));
     om2(1,k) = subject.hgf.params_neutral.p_prc.om(2);
     om2(2,k) = subject.hgf.params_aversive.p_prc.om(2);
+    om2(3,k) = subject.ID;
     om3(1,k) = subject.hgf.params_neutral.p_prc.om(3);
     om3(2,k) = subject.hgf.params_aversive.p_prc.om(3);
     zeta(1,k) = subject.hgf.params_neutral.p_obs.ze;
