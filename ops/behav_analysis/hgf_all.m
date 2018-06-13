@@ -19,6 +19,6 @@ end
 if nfailed > 0
     fprintf('\nWarning! %d model fits could not be completed.',nfailed);
 else
-    disp('\nAll model fits were completed successfully.')
+    fprintf('\nAll model fits were completed successfully.')
 end
 end
