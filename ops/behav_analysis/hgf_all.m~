@@ -10,15 +10,10 @@ for k = 1:length(all)
    catch
        nfailed = nfailed + 1;
        disp('-------------------------------------------------------------')
-       disp('----------------------- ERROR -------------------------------')
+       disp('-------------------------------------------------------------')
        disp('-------------------------------------------------------------')
        continue
    end
 end
-
-if nfailed > 0
-    fprintf('\nWarning! %d model fits could not be completed.',nfailed);
-else
-    disp('\nAll model fits were completed successfully.')
-end
+fprintf('\n
 end

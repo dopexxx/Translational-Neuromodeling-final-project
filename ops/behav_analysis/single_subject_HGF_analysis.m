@@ -9,13 +9,17 @@ load(strcat(fol_name,'/',name));
 load('metadata.mat');
 
 % Set config file for perceptual model
-if default_config   
+if default_config == 1 
     config_prc = 'tapas_hgf_binary_config'; % --> default
     config_resp = 'tapas_unitsq_sgm_config';
-else
+elseif default_config == 0
     config_prc = 'tapas_hgf_binary_LJM_config';
     config_resp = 'tapas_unitsq_sgm_config_LJM';
+elseif default_config == 2
+    config_prc = 'tapas_hgf_binary_2level_config';
+    config_resp = 'tapas_unitsq_sgm_config_LJM';
 end
+
 % Generate cue-stimulus contingency corrected input/output sequences
 HGF_input_seq = subject.behav.css.input;
 HGF_output_seq_neutral = subject.behav.css.response_neutral;
@@ -75,10 +79,12 @@ subject.hgf.sim_bo = sim_bo;
 subject.hgf.configfile_prc = config_prc;
 subject.hgf.configfile_resp = config_resp;
 
-if default_config
-    save(strcat('data/behav_analyzed_hgf/',name), 'subject');
-else 
+if default_config == 1
+    save(strcat('data/behav_analyzed_hgf_default/',name), 'subject');
+elseif default_config == 0
     save(strcat('data/behav_analyzed_hgf_newpriors/',name), 'subject');
+elseif default_config == 2
+    save(strcat('data/behav_analyzed_hgf_2layer/',name), 'subject');
 end
 
 

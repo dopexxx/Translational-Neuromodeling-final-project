@@ -15,7 +15,6 @@ css_encoding();
 %% Reject subjects with too many invalid trials
 count_irrs()
 
-
 %% (B) PERFORMANCE ANALYSIS
 %% Perform block performance analysis
 get_block_performance();
@@ -29,7 +28,7 @@ avg_block_performance(); % ToDo: make merged histograms
 
 %% (C) HGF ANALYSIS
 %% Fit HGFs and simulate HGF traces; store all data for later analysis
-default_config = 0; % only fix omega3 (var = 0)
+default_config = 2; % only fix omega3 (var = 0)
 hgf_all(default_config);
 %hgf_all(0);
 
