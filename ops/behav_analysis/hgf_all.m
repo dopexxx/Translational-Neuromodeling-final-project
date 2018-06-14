@@ -17,7 +17,7 @@ for k = 1:length(all)
 end
 
 if nfailed > 0
-    fprintf('\nWarning! %d model fits could not be completed.',nfailed);
+    fprintf('\nWarning! %d model fit(s) could not be completed.',nfailed);
 else
     fprintf('\nAll model fits were completed successfully.')
 end

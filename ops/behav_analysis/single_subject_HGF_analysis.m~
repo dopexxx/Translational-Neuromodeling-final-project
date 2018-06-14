@@ -36,13 +36,12 @@ params_bo = tapas_fitModel([],... % observations; here: empty.
 fprintf('\n 1. bo is done')
                      
 % Simulate responses
-% sim_bo = tapas_simModel(HGF_input_seq,... % data
-%                      'tapas_hgf_binary',... % perceptual model
-%                      [NaN 0 1 NaN 1 1 NaN 0 0 1 1 NaN params_bo.p_prc.om(2) params_bo.p_prc.om(3)],... % NaN, -2.5, -6 = omegas
-%                      'tapas_unitsq_sgm',... % response model: unit square sigmoid
-%                      5); % zeta parameter         
-
-                 %fprintf('\n 2. sim_bo is done')                     
+sim_bo = tapas_simModel(HGF_input_seq,... % data
+                     'tapas_hgf_binary',... % perceptual model
+                     [NaN 0 1 NaN 1 1 NaN 0 0 1 1 NaN params_bo.p_prc.om(2) params_bo.p_prc.om(3)],... % NaN, -2.5, -6 = omegas
+                     'tapas_unitsq_sgm',... % response model: unit square sigmoid
+                     5); % zeta parameter         
+fprintf('\n 2. sim_bo is done')                     
 % NEUTRAL STIMULI                     
 % Fit HGF based on participant data 
 params_neutral = tapas_fitModel(HGF_output_seq_neutral,... % observations; here: empty.
@@ -52,12 +51,12 @@ params_neutral = tapas_fitModel(HGF_output_seq_neutral,... % observations; here:
                          'tapas_quasinewton_optim_config'); % opt. algo 
 fprintf('\n 3. neut_fit is done')
 % Simulate responses
-% sim_neutral = tapas_simModel(HGF_input_seq,... % data
-%                      'tapas_hgf_binary',... % perceptual model
-%                      [NaN 0 1 NaN 1 1 NaN 0 0 1 1 NaN params_neutral.p_prc.om(2) params_neutral.p_prc.om(3)],... % NaN, -2.5, -6 = omegas
-%                      'tapas_unitsq_sgm',... % response model: unit square sigmoid
-%                      params_neutral.p_obs.ze); % zeta parameter                       
-%fprintf('\n 4. neut_sim is done')                 
+sim_neutral = tapas_simModel(HGF_input_seq,... % data
+                     'tapas_hgf_binary',... % perceptual model
+                     [NaN 0 1 NaN 1 1 NaN 0 0 1 1 NaN params_neutral.p_prc.om(2) params_neutral.p_prc.om(3)],... % NaN, -2.5, -6 = omegas
+                     'tapas_unitsq_sgm',... % response model: unit square sigmoid
+                     params_neutral.p_obs.ze); % zeta parameter                       
+fprintf('\n 3. neut_sim is done')                 
 % AVERSIVE STIMULI       
 % Fit HGF based on participant data 
 params_aversive = tapas_fitModel(HGF_output_seq_aversive,... % observations; here: empty.
@@ -65,20 +64,20 @@ params_aversive = tapas_fitModel(HGF_output_seq_aversive,... % observations; her
                          config_prc,... % perceptual model
                          config_resp,... % response model
                          'tapas_quasinewton_optim_config'); % opt. algo    
-fprintf('\n 5. av_fit is done')
+
 % Simulate responses
-% sim_aversive = tapas_simModel(HGF_input_seq,... % data
-%                      'tapas_hgf_binary',... % perceptual model
-%                      [NaN 0 1 NaN 1 1 NaN 0 0 1 1 NaN params_aversive.p_prc.om(2) params_aversive.p_prc.om(3)],... % NaN, -2.5, -6 = omegas
-%                      'tapas_unitsq_sgm',... % response model: unit square sigmoid
-%                      params_aversive.p_obs.ze); % zeta parameter                                           
-%fprintf('\n 5. av_sim is done')
+sim_aversive = tapas_simModel(HGF_input_seq,... % data
+                     'tapas_hgf_binary',... % perceptual model
+                     [NaN 0 1 NaN 1 1 NaN 0 0 1 1 NaN params_aversive.p_prc.om(2) params_aversive.p_prc.om(3)],... % NaN, -2.5, -6 = omegas
+                     'tapas_unitsq_sgm',... % response model: unit square sigmoid
+                     params_aversive.p_obs.ze); % zeta parameter                                           
+
 subject.hgf.params_neutral = params_neutral;
 subject.hgf.params_aversive = params_aversive; 
-%subject.hgf.sim_neutral = sim_neutral; 
-%subject.hgf.sim_aversive = sim_aversive; 
+subject.hgf.sim_neutral = sim_neutral; 
+subject.hgf.sim_aversive = sim_aversive; 
 subject.hgf.params_bo = params_bo;
-%subject.hgf.sim_bo = sim_bo;
+subject.hgf.sim_bo = sim_bo;
 subject.hgf.configfile_prc = config_prc;
 subject.hgf.configfile_resp = config_resp;
 
