@@ -6,15 +6,12 @@ function [mean1, mean2] = mean_comp(ID,mode)
 % Parameters:
 % -------------
 %   ID          {int} ID of the subject
-%   INDS        {logical} [trials x 1] indicating which
 %   MODE        {'sound', 'block', 'nosound', 'PE','correct'} specifies the 
-%                   criteria
-%                   along which the trials are blocked. Sound returns
+%                   criteria along which the trials are blocked. Sound returns
 %                   neutral vs aversive, block returns block1 vs block2,
 %                   nosound returns nosound_block1 vs nosound_block2,
 %                   correct returns correct against wrong trials,
-%                   PE
-%                   returns trials with prediction error (wrong trials)
+%                   PE returns trials with prediction error (wrong trials)
 %                   against correct trials.
 %
 % Returns:

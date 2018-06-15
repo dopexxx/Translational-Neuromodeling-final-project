@@ -1,12 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% This script plots all results of the GSR analysis, including:
-%   - raw data
-%   - mean trialwise responses to different variables
-%   - correlation of HGF based PE trace with
-%   ...
-%
-% Jannis Born, May 2018
+% This script plots all results of the GSR 
 
 resp_onset = 1;  % 1000ms after stimulus onset
 resp_offset = 4.5; % to 4500ms after stimulus onset 

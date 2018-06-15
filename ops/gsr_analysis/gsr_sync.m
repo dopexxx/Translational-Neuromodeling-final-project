@@ -1,4 +1,4 @@
-function [subject,data] = gsr_pipeline(ID)
+function [subject,data] = gsr_sync(ID)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   This function executes an analytical pipeline for the GSR data of a 
 %   participant.
@@ -10,14 +10,10 @@ function [subject,data] = gsr_pipeline(ID)
 %   Returns:
 %   ----------------
 %   SUBJECT         {struct} like before with some added fields
+%   DATA            {struct} in preparation for ledalab toolbox
 %
 %       Jannis Born, May 2018
 
-
-% subject.behav.
-% subject.gsr.
-% subject.stats.
-% subject.hgf.
 
 load(['data/recordings/gsr_',int2str(ID),'.mat'])
 load(['data/behav_analyzed_hgf_newpriors/subject_',int2str(ID),'.mat'])
@@ -133,87 +129,86 @@ end
 [data.event.name] = stims{:};
 [data.event.time] = times{:};
 
-% %%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %
-% % Now the analysis can begin.
-% % We look at 
-% %   1) The mean median-filtered SCR response for both blocks (neutral/aversive)
-% %   2) The PSTH of both blocks
-% 
-% % defines window of interest for 1) and 2)
-% resp_onset = 1;  % 1000ms before stimulus
-% resp_offset = 3.5; % to 3500ms after stimulus
-% 
-% % 1) Collect all response windows and average
-% neutral_resp = zeros(length(subject.behav.raw.stim_onsets),...
-%     length(-1*resp_onset:sample_dist:resp_offset));
-% aversive_resp = zeros(size(neutral_resp));
-% 
-% for k = 1:length(subject.behav.raw.stim_onsets)
-%     [t,neutral_ind] = min(abs(subject.behav.relative_times(1,k) - ...
-%         subject.gsr.timings));
-%     [t,aversive_ind] = min(abs(subject.behav.relative_times(2,k) - ...
-%         subject.gsr.timings));
-%     neutral_resp(k,:) = subject.gsr.values(neutral_ind-resp_onset ...
-%         /sample_dist : neutral_ind+resp_offset/sample_dist);
-%     aversive_resp(k,:) = subject.gsr.values(aversive_ind-resp_onset ...
-%         /sample_dist : aversive_ind+resp_offset/sample_dist);
-% end
-% %subject.gsr.neutral_sound_resp = mean(neutral_resp,1);
-% %subject.gsr.aversive_sound_resp = mean(aversive_resp,1);
-% rat_stim = mean(metadata.stimuli);
-% subject.gsr.neutral_sound_resp = 1/rat_stim * mean(neutral_resp.*metadata.stimuli,1);
-% subject.gsr.aversive_sound_resp = 1/rat_stim * mean(aversive_resp.*metadata.stimuli,1);
-% subject.gsr.neutral_no_sound_resp = 1/(1-rat_stim) * mean(neutral_resp.*~metadata.stimuli,1);
-% subject.gsr.aversive_no_sound_resp = 1/(1-rat_stim) * mean(aversive_resp.*~metadata.stimuli,1);
-% 
-% 
-% 
-% % 2) Compute PSTH, i.e. binarize signal
-% subject.gsr.psth = struct();
-% subject.gsr.bin_values = subject.gsr.values > mean(subject.gsr.values);
-% 
-% 
-% % The borders for the PSTH w.r.t the event and the density of the bins 
-% bin_size = 0.1;
-% subject.gsr.psth.borders = [-1*resp_onset, resp_offset];
-% subject.gsr.psth.bin_size = bin_size;
-% 
-% 
-% bins_neutral = zeros(length(-1*resp_onset:bin_size:resp_offset),1);
-% bins_aversive = bins_neutral;
-% 
-% % Compute value of every bin
-% for k = 1:length(subject.behav.raw.stim_onsets)
-%     
-%     [t,neutral_ind] = min(abs(subject.behav.relative_times(1,k) - ...
-%         subject.gsr.timings));
-%     [t,aversive_ind] = min(abs(subject.behav.relative_times(2,k) - ...
-%         subject.gsr.timings));
-%     
-%     bins_neutral = bins_neutral + subject.gsr.bin_values(neutral_ind-...
-%         resp_onset/bin_size : neutral_ind+resp_offset/bin_size);
-%     bins_aversive = bins_aversive + subject.gsr.bin_values(aversive_ind-...
-%         resp_onset/bin_size : aversive_ind+resp_offset/bin_size);
-% end
-%         
-% subject.gsr.psth.neutral = bins_neutral/length(subject.behav.raw.responses);
-% subject.gsr.psth.aversive = bins_aversive/length(subject.behav.raw.responses);
-% %end
-% 
-% 
-% %% TODO:
-% % Think about a better way of preprocessing/filtering
-% % Make a more clever binarization than the current binarization
-% % Get one binary value PER TRIAL (by averaging over the window and > 0.5)
-% % -> Feed into GSR
-% % Look into other GSR features
-% % Function plotting all the results
-% % Rename files and delete doubles
-% % Mean response -> Dot product with sound vectors!
-% 
-% % gsr_plotting(); 
-% 
-% 
+end
+
+
+
+
+
+function stim_onset_syn = synchronize(stim_onset, delta)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Synchronizes GSR and behavioral data
+%
+%   Parameters:
+%   -------------
+%   STIM_ONSET      {double} [3,1] with stimulus onset time in [h,min,sec]
+%   DELTA           {double} [1,1] time delta of system clocks (in ms!)
+%
+%
+%   Returns:
+%   -------------
+%   STIM_ONSET_SYN  {double} [3,1] corrected time in same format like
+%                       original
+
+raw_sec = stim_onset(3) + delta; % Uncorrected (may be > 60)
+sec = mod(raw_sec, 60); % second overflow
+raw_min = stim_onset(2) + floor(raw_sec/60);
+min = mod(raw_min , 60);
+raw_hour = stim_onset(1) + floor(raw_min/60);
+hour = mod(raw_hour , 24);
+
+stim_onset_syn = [hour;min;sec];
+
+end
+
+function rel_time = time_abs_to_rel(abs_time, baseline)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Converts an absolute time into a relative one (w.r.t. to an baseline)
+% Requires that abs_time is greater (later) than baseline. 
+%
+%   Parameters:
+%   ---------------
+%   ABS_TIME        {double} [3x1], absolute time in hh,min,sec
+%   BASLINE         {double} [3x1], same format, baseline time (0 in
+%                       relative terms)
+%
+%   Returns:
+%   ---------------
+%   REL_TIME        {double} [1x1], relative time, in ms w.r.t baseline
+
+
+if baseline(1) > abs_time(1) || ...
+        (baseline(1) == abs_time(1) && baseline(2) > abs_time(2)) || ...
+        (baseline(1) == abs_time(1) && baseline(2) == abs_time(2) && ...
+         baseline(3) > abs_time(3))
+     
+     rel_time = -1; % means that abs_time is before baseline.
+else
+
+    % sec diff.
+    if baseline(3) <= abs_time(3)
+        rel_ms = abs_time(3) - baseline(3);
+    else
+        rel_ms = (60-baseline(3)) + abs_time(3);
+        baseline(2) = baseline(2) + 1; % correct minutes
+        if baseline(2) > 59
+            baseline(3) = baseline(3) + 1; % correct hour when min overflow
+            baseline(2) = 0; % reset minutes
+        end
+    end
+
+    % min diff
+    if baseline(2) <= abs_time(2)
+        rel_min = abs_time(2) - baseline(2);
+    else
+        rel_min = (60-baseline(2)) + abs_time(2);
+        baseline(1) = baseline(1) + 1; % correct hour  
+    end
+
+    if baseline(1) ~= abs_time(1)
+        error("Did this experiment really take longer than one hour?")
+    end
+
+    rel_time = rel_min*60 + rel_ms;
+
 end
