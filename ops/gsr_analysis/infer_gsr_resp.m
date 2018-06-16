@@ -52,6 +52,7 @@ for trial_ind = trial_onset:300
     bin_off = sample_ind_onset + sf*resp_offset;
 
     trial_resp = analysis.phasicData(bin_on:bin_off);
+    %trial_resp = trial_resp/max(trial_resp);
     
     ind = mod(trial_ind,150);
     if ind == 0 
@@ -72,6 +73,7 @@ for trial_ind = trial_onset:300
 end
 
 gsr_resp = reshape(gsr_resp,2,150);
+
 
 end
 

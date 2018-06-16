@@ -3,13 +3,15 @@
 % bin
 
 % Try first with the normal HGF fits (not new prior)
+close all; clc;
 figure
 r=0;
 res = cell(4,3);
-for ID = inds
+ids = [11,12,13,16];
+for ID = ids
     
     r = r+1;
-    load(['data/behav_analyzed_hgf/subject_',int2str(ID),'.mat'])
+    load(['data/behav_analyzed_hgf_default/subject_',int2str(ID),'.mat'])
     load(['data/gsr_ledalab/subject_',num2str(ID),'_post.mat'])
 
     trials = [150,150]; % trials per block
