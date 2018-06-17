@@ -1,0 +1,629 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This script plots all results of the GSR analysis, including:
+%   - raw data
+%   - mean trialwise responses to different variables
+%   - correlation of HGF based PE trace with
+%   ...
+%
+% Jannis Born, May 2018
+
+resp_onset = 1;  % 1000ms after stimulus onset
+resp_offset = 4.5; % to 4500ms after stimulus onset 
+sf = 50; % sampling frequency is 50 Hz
+
+% for plotting
+niceBlue = [0 112/255 234/255];
+niceRed = [200/255 8/255 0/255];
+niceGreen =  [116/255 166/255 95/255];
+
+%%
+% This section  plots the GSR raw data and the SCR component extracted via
+% Ledalab.
+
+ids = [11,12,13,16];
+raw = cell(4,1);
+post = cell(4,1);
+figure 
+for ind = 1:length(ids)
+    id = ids(ind);
+    load(['data/gsr_ledalab/subject_',num2str(id),'_post.mat']);
+    raw{ind} = data.conductance;
+    post{ind} = analysis.phasicData;
+    subplot(4,2,ind*2-1);
+    plot(data.conductance);
+    title(['Raw data subject ',num2str(id)]);
+    subplot(4,2,ind*2);
+    plot(analysis.phasicData);
+    title(['Phasic component subject ',num2str(id)]);
+end
+savefig('data/gsr_results/raw_post.fig');
+
+
+figure
+subplot(1,2,1);
+for ind = 1:4
+    plot(raw{ind}); hold on;
+    title('Raw data')
+end
+subplot(1,2,2);
+
+for ind = 1:4
+    plot(post{ind}); hold on;
+    title('Phasic component')
+end
+
+
+
+%% Generate mean trialwise responses based on some variables.
+inds = [11,13,16,12];
+responses = cell(4,1);
+k = 0;
+cc = zeros(4,1);
+for ID = inds
+    k=k+1;
+    load(['data/behav_analyzed_hgf_2layer/subject_',num2str(ID),'.mat']);
+    subject.gsr.responses = struct();
+    [subject.gsr.responses.neut, subject.gsr.responses.av] = mean_comp(ID,'sound');
+    [subject.gsr.responses.b1, subject.gsr.responses.b2] = mean_comp(ID,'block');
+    [subject.gsr.responses.nos1, subject.gsr.responses.nos2] = mean_comp(ID,'nosound');
+    %[subject.gsr.responses.pe, dummy] = mean_comp(ID,'PE');
+    [subject.gsr.responses.true, subject.gsr.responses.false] = mean_comp(ID,'correct');
+    save(['data/gsr_results/subject_',num2str(ID),'.mat'],'subject');
+    
+    responses{k} = subject.gsr.responses;
+    
+%     disp('Correlate PE trace with responses is ');
+%     if ID == 12
+%         resp = [subject.hgf.params_neutral.traj.epsi(8:end,2);...
+%             subject.hgf.params_aversive.traj.epsi(:,2)];
+%         c = corrcoef(subject.gsr.responses.pe,resp);
+%     else
+%         c = corrcoef(subject.gsr.responses.pe,[subject.hgf.params_neutral.traj.epsi(:,2);...
+%             subject.hgf.params_aversive.traj.epsi(:,2)]);
+%     end
+%     c(1,2)
+%     cc(k) = c(1,2);
+end
+
+%disp('Mean correlation of HGF based PE trace with scr responses is');
+%mean(cc)
+
+
+%% Plot results of the mean trialwise responses
+figure
+for k = 1:4
+    subplot(2,2,k);
+    %nn = responses{k}.neut./max(responses{k}.neut);
+    %na = responses{k}.av./max(responses{k}.av);
+    nn = responses{k}.neut;
+    na = responses{k}.av;
+    plot(resp_onset:1/sf:resp_offset,nn); hold on;
+    plot(resp_onset:1/sf:resp_offset,na);  
+    title(['Subject ',num2str(inds(k))]);
+    xlabel('Seconds')
+    legend('Reponse to neutral sound','Response to aversive sound');
+    savefig
+end
+
+
+figure
+for k = 1:4
+    subplot(2,2,k);
+    %nn = responses{k}.nos1./max(responses{k}.nos1);
+    %na = responses{k}.nos2./max(responses{k}.nos2);
+    nn = responses{k}.nos1;
+    na = responses{k}.nos2;
+    plot(resp_onset:1/sf:resp_offset,nn); hold on;
+    plot(resp_onset:1/sf:resp_offset,na);  
+    title(['Subject ',num2str(inds(k))]);
+    xlabel('Seconds')
+    legend('Reponse to no sound in block 1','Response to no sound in block 2');
+end
+
+figure
+for k = 1:4
+    subplot(2,2,k);
+    %nn = responses{k}.b1./max(responses{k}.b1);
+    %na = responses{k}.b2./max(responses{k}.b2);
+    nn = responses{k}.b1;
+    na = responses{k}.b2;
+    plot(resp_onset:1/sf:resp_offset,nn); hold on;
+    plot(resp_onset:1/sf:resp_offset,na);  
+    title(['Subject ',num2str(inds(k))]);
+    xlabel('Seconds')
+    legend('Reponse in first block','Response in second block');
+end
+
+
+figure
+for k = 1:4
+    subplot(2,2,k);
+    %nn = responses{k}.b1./max(responses{k}.b1);
+    %na = responses{k}.b2./max(responses{k}.b2);
+    nn = responses{k}.true;
+    na = responses{k}.false;
+    plot(resp_onset:1/sf:resp_offset,nn); hold on;
+    plot(resp_onset:1/sf:resp_offset,na);  
+    title(['Subject ',num2str(inds(k))]);
+    xlabel('Seconds')
+    legend('Reponse for correct trials','Response in wrong trials');
+end
+
+
+%% Cumulative plot of all variables
+
+figure
+set(gcf,'color','w');
+
+subplot(2,2,1);
+nn = mean([responses{1}.neut;responses{2}.neut/4;responses{3}.neut;responses{4}.neut],1);
+na = mean([responses{1}.av;responses{2}.av/4;responses{3}.av;responses{4}.av],1);
+plot(resp_onset:1/sf:resp_offset,nn,'color',niceBlue,'linewidth',2); hold on;
+plot(resp_onset:1/sf:resp_offset,na,'color',niceRed,'linewidth',2);  
+xlabel('seconds post stimulus')
+title('Mean trialwise response')
+ylabel('response amplitude')
+xlim([1,4.5])
+legend('Neutral sound','Aversive sound');
+
+subplot(2,2,2);
+nn = mean([responses{1}.b1;responses{2}.b1/4;responses{3}.b1;responses{4}.b1],1);
+na = mean([responses{1}.b2;responses{2}.b2/4;responses{3}.b2;responses{4}.b2],1);
+plot(resp_onset:1/sf:resp_offset,nn,'color',niceBlue,'linewidth',2); hold on;
+plot(resp_onset:1/sf:resp_offset,na,'color',niceRed,'linewidth',2);  
+xlabel('seconds post stimulus')
+title('Mean trialwise response')
+ylabel('response amplitude')
+xlim([1,4.5])
+legend('Session 1','Session 2');
+
+subplot(2,2,3);
+%nn = mean([responses{1}.nos1;responses{2}.nos1/4;responses{3}.nos1;responses{4}.nos1],1);
+%na = mean([responses{1}.nos2;responses{2}.nos2/4;responses{3}.nos2;responses{4}.nos2],1);
+nn = mean([mean([responses{1}.neut;responses{1}.av],1); ...
+    mean([responses{2}.neut;responses{2}.av],1)/4; 
+    mean([responses{3}.neut;responses{3}.av],1);
+    mean([responses{4}.neut;responses{4}.av],1)],1);
+na = mean([mean([responses{1}.nos1;responses{1}.nos2],1); ...
+    mean([responses{2}.nos1;responses{2}.nos2],1)/4; 
+    mean([responses{3}.nos1;responses{3}.nos2],1);
+    mean([responses{4}.nos1;responses{4}.nos2],1)],1);
+plot(resp_onset:1/sf:resp_offset,nn,'color',niceBlue,'linewidth',2); hold on;
+plot(resp_onset:1/sf:resp_offset,na,'color',niceRed,'linewidth',2);  
+xlabel('seconds post stimulus')
+title('Mean trialwise response')
+ylabel('response amplitude')
+xlim([1,4.5])
+legend('Trials with sound','Trials without sound');
+
+subplot(2,2,4);
+nn = mean([responses{1}.true;responses{2}.true/4;responses{3}.true;responses{4}.true],1);
+na = mean([responses{1}.false;responses{2}.false/4;responses{3}.false;responses{4}.false],1);
+plot(resp_onset:1/sf:resp_offset,nn,'color',niceGreen,'linewidth',2); hold on;
+plot(resp_onset:1/sf:resp_offset,na,'color',niceRed,'linewidth',2);  
+xlabel('seconds post stimulus')
+title('Mean trialwise response')
+ylabel('response amplitude')
+xlim([1,4.5])
+legend('Correct trials', 'Wrong trials');
+
+%%
+niceBlue = [0 112/255 234/255];
+niceRed = [200/255 8/255 0/255];
+
+
+%% For every participant, take the PE trajectory, assign each value to one 
+% out of 3 bins and plot the mean response of all trials falling into that
+% bin
+clc
+% Try first with the normal HGF fits (not new prior)
+figure
+k=0;
+a = zeros(4,3,176);
+for ID = ids
+    k = k+1;
+    %load(['data/behav_analyzed_hgf/subject_',int2str(ID),'.mat'])
+    load(['data/behav_analyzed_hgf_newpriors/subject_',num2str(ID),'.mat'])
+    load(['data/gsr_ledalab/subject_',num2str(ID),'_post.mat']);
+    
+    % Assign HGF PE values to one of 3 discrete bins
+    pe_bins = zeros(2,150); % will contain strength of PE   
+    for trial = 1:150
+        if abs(subject.hgf.params_neutral.traj.epsi(trial,3)) < 0.05
+            pe_bins(1,trial) = 1;
+        %elseif abs(subject.hgf.params_neutral.traj.epsi(trial,2)) < 1
+        %    pe_bins(1,trial) = 2;
+        else
+            pe_bins(1,trial) = 3;
+        end
+        
+        if abs(subject.hgf.params_aversive.traj.epsi(trial,3)) < 0.05
+            pe_bins(2,trial) = 1;
+        %elseif abs(subject.hgf.params_neutral.traj.epsi(trial,2)) < 1
+        %    pe_bins(2,trial) = 2;
+        else
+            pe_bins(2,trial) = 3;
+        end
+    end
+    
+    pe_low_neut = zeros(length(find(pe_bins(1,:)==1)),176);
+    pe_low_av = zeros(length(find(pe_bins(2,:)==1)),176);
+    pe_mid_neut = zeros(length(find(pe_bins(1,:)==2)),176);
+    pe_mid_av = zeros(length(find(pe_bins(2,:)==2)),176);
+    pe_high_neut = zeros(length(find(pe_bins(1,:)==3)),176);
+    pe_high_av = zeros(length(find(pe_bins(2,:)==3)),176);
+    
+    size(pe_low_neut)
+    size(pe_low_av)
+    
+    cln=0; cla=0; cmn=0; cma=0; chn=0; cha=0;
+    
+    for block = 1:2
+        for trial = 1:150
+            trial_onset = data.event(trial).time; % ms precise sound onset
+            % index of the nearest SCR sample
+            sample_ind_onset = find(round(data.time*sf)/sf==...
+                round(trial_onset*sf)/sf);
+            bin_on = sample_ind_onset + sf*resp_onset; 
+            bin_off = sample_ind_onset + sf*resp_offset;
+
+            trial_resp = analysis.phasicData(bin_on:bin_off);
+            
+            if pe_bins(block,trial) == 1 && block == 1
+                cln = cln+1;
+                pe_low_neut(cln,:) = trial_resp;
+            elseif pe_bins(block,trial) == 1 && block == 2
+                cla = cla+1;
+                pe_low_av(cla,:) = trial_resp;
+           elseif pe_bins(block,trial) == 2 && block == 1
+                cmn = cmn+1;
+                pe_mid_neut(cmn,:) = trial_resp;
+           elseif pe_bins(block,trial) == 2 && block == 2
+                cma = cma+1;
+                pe_mid_av(cma,:) = trial_resp;
+           elseif pe_bins(block,trial) == 3 && block == 1
+                chn = chn+1;
+                pe_high_neut(chn,:) = trial_resp;
+            elseif pe_bins(block,trial) == 3 && block == 2
+                cha = cha+1;
+                pe_high_av(cha,:) = trial_resp;    
+            end
+        end
+    end
+    %
+    subplot(2,2,k)
+    low = mean([pe_low_neut;pe_low_av],1);
+    mid = mean([pe_mid_neut;pe_mid_av],1);
+    high = mean([pe_high_neut;pe_high_av],1);
+    
+    a(k,1,:) = low;
+    a(k,2,:) = mid;
+    a(k,3,:) = high;
+
+    plot(resp_onset:1/sf:resp_offset,low); hold on;
+    plot(resp_onset:1/sf:resp_offset,mid); 
+    plot(resp_onset:1/sf:resp_offset,high);  
+    title(['Mean stimulus specific response if ID ',num2str(ID),' had...'])
+    xlabel('Seconds')
+    ylabel('relative signal strength')
+    legend('... low PE', '...medium PE','...high PE');
+    savefig('data/gsr_results/resp_as_fct_of_pe.fig')
+end
+a(3,:,:) = a(3,:,:)/4;
+
+%% Mean response 
+
+figure
+plot(resp_onset:1/sf:resp_offset,mean(squeeze(a(:,1,:)),1),'color',niceBlue);
+hold on; 
+plot(resp_onset:1/sf:resp_offset,mean(squeeze(a(:,2,:)),1),'color',niceGreen);
+plot(resp_onset:1/sf:resp_offset,mean(squeeze(a(:,3,:)),1),'color',niceRed);
+xlabel('Seconds'); ylabel('relative signal strength');
+title('Mean stimulus specific response if PE was ...')
+legend('low', 'medium','high');
+
+
+%% Mean response of all participants ifor no sound in both blocks
+figure
+nn = mean([responses{1}.nos1;responses{2}.nos1/4;responses{3}.nos1;responses{4}.nos1]);
+na = mean([responses{1}.nos2;responses{2}.nos2/4;responses{3}.nos2;responses{4}.nos2]);
+plot(resp_onset:1/sf:resp_offset,nn); hold on;
+plot(resp_onset:1/sf:resp_offset,na);  
+title(['Average across all participants']);
+xlabel('Seconds')
+ylabel('relative signal strength')
+legend('Reponse for no sound in block 1','Response for no sound in block 2');
+savefig('data/gsr_results/Average prediction related response.fig')
+
+
+%% Mean response of all participants ifor no sound in both blocks
+figure
+nn = mean([responses{1}.nos1;responses{2}.nos1/4;responses{3}.nos1;responses{4}.nos1]);
+na = mean([responses{1}.nos2;responses{2}.nos2/4;responses{3}.nos2;responses{4}.nos2]);
+plot(resp_onset:1/sf:resp_offset,nn); hold on;
+plot(resp_onset:1/sf:resp_offset,na);  
+title(['Average across all participants']);
+xlabel('Seconds')
+ylabel('relative signal strength')
+legend('Reponse for no sound in block 1','Response for no sound in block 2');
+savefig('data/gsr_results/Average prediction related response.fig')
+%% Mean response of all participants in blocks 1 and 2 
+figure
+nn = mean([responses{1}.b1;responses{2}.b1/4;responses{3}.b1;responses{4}.b1]);
+na = mean([responses{1}.b2;responses{2}.b2/4;responses{3}.b2;responses{4}.b2]);
+plot(resp_onset:1/sf:resp_offset,nn); hold on;
+plot(resp_onset:1/sf:resp_offset,na);  
+title(['Average across all participants']);
+xlabel('Seconds')
+ylabel('relative signal strength')
+legend('Reponse for block 1','Response in block 2');
+savefig('data/gsr_results/Average prediction related response.fig')
+%% Mean response of all participants in neutral and aversive sound
+figure
+nn = mean([responses{1}.av;responses{2}.av/4;responses{3}.av;responses{4}.av]);
+na = mean([responses{1}.neut;responses{2}.neut/4;responses{3}.neut;responses{4}.neut]);
+plot(resp_onset:1/sf:resp_offset,na); hold on;
+plot(resp_onset:1/sf:resp_offset,nn);  
+title(['Average across all participants']);
+xlabel('Seconds')
+ylabel('relative signal strength')
+legend('Reponse for neutral sound','Response for aversive sound');
+savefig('data/gsr_results/Average prediction related response.fig')
+%% Mean response of all participants in correct and wrong trials
+figure
+%nn = mean([responses{1}.true;responses{2}.true/4;responses{3}.true;responses{4}.true]);
+%na = mean([responses{1}.false;responses{2}.false/4;responses{3}.false;responses{4}.false]);
+nn = mean([responses{1}.true;responses{2}.true/4;responses{3}.true;responses{4}.true]);
+na = mean([responses{1}.false;responses{2}.false/4;responses{3}.false;responses{4}.false]);
+
+plot(resp_onset:1/sf:resp_offset,nn,'linewidth',3,'color',niceGreen); hold on;
+plot(resp_onset:1/sf:resp_offset,na,'linewidth',3,'color',niceRed);  
+%set(gca,
+title(['Average across remaining participants (N=4)']);
+set(gcf,'color','white');
+set(gca, 'FontSize', 16)
+xlabel('Seconds')
+ylabel('relative signal strength')
+legend('Reponse for correct trials','Response in wrong trials');
+savefig('data/gsr_results/Average prediction related response.fig')
+
+
+%% Compute canonical WRONG and canonical CORRECT resp
+fs = 60; % strength of mean filter
+can_corr = medfilt1(nn,fs);
+can_corr(1) = can_corr(2); can_corr(end) = can_corr(end-1);
+can_wrong = medfilt1(na,fs);
+can_wrong(1) = can_wrong(2); can_wrong(end)=can_wrong(end-1);
+figure
+plot(resp_onset:1/sf:resp_offset,can_corr,'linewidth',5,'color',niceGreen); hold on;
+plot(resp_onset:1/sf:resp_offset,can_wrong,'linewidth',5,'color',niceRed); 
+set(gcf,'color','w');
+set(gca, 'FontSize', 16)
+set(gca, 'FontSize', 16)
+xlabel('Seconds')
+ylabel('relative signal strength')
+title('Canonical response if answer was ...')
+legend('... correct', '... wrong')
+
+%
+can_corr = can_corr/max(can_corr);
+can_wrong = can_wrong/max(can_wrong);
+
+%% Generate the GSR response based on the euclidean dist of each trials' signal 
+% with the canonical responses. Take the signal based on 
+
+for ID = ids
+    load(['data/gsr_results/subject_',num2str(ID),'.mat'])
+    ID
+    gsr_resp = infer_gsr_resp(ID,can_corr,can_wrong);
+    
+    disp('Behavioral scores of the participant are ')
+    subject.scores
+    
+    gsr_scores = compute_score(subject,gsr_resp);
+    disp('GSR based scores of the participant are ')
+    gsr_scores
+
+    
+end
+
+
+%% Compute and plot the performances of the PE actions
+
+compute_plot_gsr_score();
+
+%% Correlate PE traces with HGF PE traces
+corrs = zeros(4,2); % rows are subjects, cols 1-2 for block 1 and 2
+for k = 1:4
+    load(['data/behav_analyzed_hgf_default/subject_',num2str(inds(k)),'.mat']);
+    load('data/metadata.mat');
+    
+    
+    if k<4
+        PEs = reshape(responses{k}.pe,2,150);
+        c = corrcoef(PEs(1,:), abs(subject.hgf.params_neutral.traj.epsi(:,2)));
+        corrs(k,1) = c(1,2);
+        c = corrcoef(PEs(2,:), abs(subject.hgf.params_aversive.traj.epsi(:,2)));
+        corrs(k,2) = c(1,2);
+    else
+        % Subject ID 12 has missing trials...
+        PEs = [zeros(7,1);responses{k}.pe(1:143);responses{k}.pe(144:end)];
+        PEs = reshape(PEs,2,150);
+        c = corrcoef(PEs(1,8:end), abs(subject.hgf.params_neutral.traj.epsi(8:end,2)));
+        corrs(k,1) = c(1,2);
+        c = corrcoef(PEs(2,:), abs(subject.hgf.params_aversive.traj.epsi(:,2)));
+        corrs(k,2) = c(1,2);
+    end
+ 
+end
+
+corrs
+% Results are not meaningful (never over r=0.12)
+
+%% Fit the responses backtracked from the PE signal in GSR in the HGF
+% and compare with the behavior based HGF
+inds = [11,13,16,12];
+gsr_hgf = cell(3,2);
+for k = 1:4
+    
+    load(['data/gsr_results/subject_',num2str(inds(k)),'.mat']);
+    
+    HGF_input_seq =  subject.behav.css.input;
+    HGF_output_seq_neutral = subject.gsr.csc_actions_neutral;
+    subject.gsr.params_gsr_neutral = tapas_fitModel(HGF_output_seq_neutral,... % observations; here: empty.
+                             HGF_input_seq,... % input
+                             'tapas_hgf_binary_config',... % perceptual model
+                             'tapas_unitsq_sgm_config',... % response model
+                             'tapas_quasinewton_optim_config'); % opt. algo  
+
+    HGF_input_seq =  subject.behav.css.input;
+    HGF_output_seq_aversive = subject.gsr.csc_actions_aversive;
+    subject.gsr.params_gsr_aversive = tapas_fitModel(HGF_output_seq_aversive,... % observations; here: empty.
+                             HGF_input_seq,... % input
+                             'tapas_hgf_binary_config',... % perceptual model
+                             'tapas_unitsq_sgm_config',... % response model
+                             'tapas_quasinewton_optim_config'); % opt. algo  
+                         
+                         
+    subject.gsr.params_gsr_neutral = tapas_simModel(HGF_input_seq,... % data
+                         'tapas_hgf_binary',... % perceptual model
+                         subject.gsr.params_gsr_neutral.p_prc.p,... % NaN, -2.5, -6 = omegas
+                         'tapas_unitsq_sgm',... % response model: unit square sigmoid
+                         5) % zeta parameter  
+    
+    subject.gsr.params_gsr_aversive = tapas_simModel(HGF_input_seq,... % data
+                         'tapas_hgf_binary',... % perceptual model
+                         subject.gsr.params_gsr_aversive.p_prc.p,... % NaN, -2.5, -6 = omegas
+                         'tapas_unitsq_sgm',... % response model: unit square sigmoid
+                         5) % zeta parameter
+                     
+    save(['data/gsr_results/subject_',num2str(inds(k)),'.mat'],'subject');
+
+end
+
+%% Parameter comparison of omega2 vor SCR based and behaviorl HGF fits
+
+oms = zeros(2,8); % first row is behav, second is gsr, cols are 2*n (neut/av)
+k=0;
+ids = [11,12,13,16];
+
+
+for ID = ids
+    k=k+1;
+    load(['data/gsr_results/subject_',num2str(ID),'.mat']);
+    oms(2,k) = subject.gsr.params_gsr_neutral.p_prc.om(2);
+    oms(2,k+4) = subject.gsr.params_gsr_aversive.p_prc.om(2);
+    
+    load(['data/behav_analyzed_hgf_default/subject_',num2str(ID),'.mat']);
+    oms(1,k) = subject.hgf.params_neutral.p_prc.om(2);
+    oms(1,k+4) = subject.hgf.params_aversive.p_prc.om(2);
+end 
+
+% Plotting
+
+subplot(1,2,2);
+cmap = [niceBlue; niceRed; niceGreen; [0,0,0]];
+% plot(ones(4,1),oms(1,1:4),'o'); hold on; % o for neutral, s for aversive
+% plot(ones(4,1),oms(1,5:8),'x');
+% plot(2*ones(4,1),oms(2,1:4),'o');
+% plot(2*ones(4,1),oms(2,5:8),'x');
+scatter(ones(4,1),oms(1,1:4),150,cmap,'filled','Marker','o');hold on;
+scatter(ones(4,1),oms(1,5:8),150,cmap,'filled','Marker','s');
+scatter(2*ones(4,1),oms(2,1:4),150,cmap,'filled','Marker','o');
+scatter(2*ones(4,1),oms(2,5:8),150,cmap,'filled','Marker','s');
+hold on;
+xlim([0.75,2.25]);ylim([-9,0]);
+
+for k = 1:4  
+    plot([1,2], [oms(1,k),oms(2,k)],'linewidth',2,'color',cmap(k,:));hold on;
+    plot([1,2], [oms(1,k+4),oms(2,k+4)],'linewidth',2,'color',cmap(k,:));
+end
+
+xticks(1:2);xticklabels({'Behavioral','SCR'});
+yticks(-10:2:0)
+title('\omega_2')
+set(gca,'fontsize',15)
+set(gcf,'color','w');
+ylabel('\omega_2')
+box on;
+legend('Neutral','Aversive')
+
+
+%%
+correlate_hgf_scr_pe_traj;
+
+%% Correlate the PE trace with the SCR response
+r=0;
+ids = [11,12,13,16];
+resp_onset = 1;  % 1000ms after stimulus onset
+resp_offset = 4.5; % to 4500ms after stimulus onset 
+sf = 50; % sampling frequency is 50 Hz
+
+for ID = ids
+    r = r+1;
+    load(['data/behav_analyzed_hgf_default/subject_',int2str(ID),'.mat'])
+    load(['data/gsr_ledalab/subject_',num2str(ID),'_post.mat'])
+    
+    % PE traces (eps2 and eps3)
+    pe_2 = zeros(2,150);
+    pe_3 = zeros(2,150);
+    pe_2(1,:) = abs(subject.hgf.params_neutral.traj.epsi(:,2)); 
+    pe_2(2,:) = abs(subject.hgf.params_aversive.traj.epsi(:,2));
+    pe_3(1,:) = abs(subject.hgf.params_neutral.traj.epsi(:,3));
+    pe_3(2,:) = abs(subject.hgf.params_aversive.traj.epsi(:,3));
+    
+    scr = zeros(2,150);
+    gsr_index=1;
+    for block = 1:2
+        for trial = 1:150
+            trial_onset = data.event(gsr_index).time; % ms precise sound onset
+
+            % index of the nearest SCR sample
+            sample_ind_onset = find(round(data.time*sf)/sf==...
+                round(trial_onset*sf)/sf);
+            bin_on = sample_ind_onset + sf*resp_onset; 
+            bin_off = sample_ind_onset + sf*resp_offset;
+            
+            scr(block,trial) = mean(analysis.phasicData(bin_on:bin_off));
+            
+        end
+    end
+    
+    disp('Correlation between eps2 and SCR trace is')
+    corr(pe_2(1,:)',scr(1,:)')
+    corr(pe_2(2,:)',scr(2,:)')
+    disp('Correlation between eps3 and SCR trace is')
+    corr(pe_3(1,:)',scr(1,:)')
+    corr(pe_3(2,:)',scr(2,:)')
+    
+    % Normalize
+    pe_2(1,:) = pe_2(1,:)/max(pe_2(1,:));
+    pe_2(2,:) = pe_2(2,:)/max(pe_2(2,:));
+    pe_3(1,:) = pe_3(1,:)/max(pe_3(1,:));
+    pe_3(2,:) = pe_3(2,:)/max(pe_3(2,:));
+    scr(1,:) = scr(1,:)/max(scr(1,:));
+    scr(2,:) = scr(2,:)/max(scr(2,:));
+    disp('Correlation between eps2 and SCR trace is')
+    corr(pe_2(1,:)',scr(1,:)')
+    corr(pe_2(2,:)',scr(2,:)')
+    disp('Correlation between eps3 and SCR trace is')
+    corr(pe_3(1,:)',scr(1,:)')
+    corr(pe_3(2,:)',scr(2,:)')
+    
+end
+
+
+%% Perform binomialtests on the behavioral and SCR inferred responses
+
+
+ids = [11,12,13,16];
+ct = zeros(4,1);
+k=0;
+for ID = ids
+    k=k+1;
+    load(['data/gsr_results/subject_',int2str(ID),'.mat'])  
+    ct(k) = sum([subject.scores(1,2)*150, subject.scores(2,2)*150]);
+end
+tr = myBinomTest(sum(ct),8*150,0.5)
+disp(['Behavioral test results are ', num2str(tr)])

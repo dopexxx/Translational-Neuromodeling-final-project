@@ -6,23 +6,14 @@ function gsr_resp = infer_gsr_resp(ID,can_corr,can_wrong)
 % Parameters:
 % -------------
 %   ID          {int} ID of the subject
-%   INDS        {logical} [trials x 1] indicating which
-%   MODE        {'sound', 'block', 'nosound', 'PE','correct'} specifies the 
-%                   criteria
-%                   along which the trials are blocked. Sound returns
-%                   neutral vs aversive, block returns block1 vs block2,
-%                   nosound returns nosound_block1 vs nosound_block2,
-%                   correct returns correct against wrong trials,
-%                   PE
-%                   returns trials with prediction error (wrong trials)
-%                   against correct trials.
+%   CAN_CORR    {double} canonical SCR response for trials without PE
+%   CAN_WRONG   {double} canonical SCR response for trials with PE
+%
 %
 % Returns:
 % -------------
-% MEAN1        {double} [samp_per_trial x 1], i.e. mean response to first
-%                    stimulus type
-% MEAN2        {double} [samp_per_trial x 1], i.e. mean response to second
-%                    stimulus type
+% GSR_RESP      {double} belief about occurrence of sound in every trial
+%                   inferred from SCR data only.
 %
 % Jannis Born, May 2018
 
@@ -37,10 +28,11 @@ resp_offset = 4.5; % to 4500ms after stimulus onset
 sf = 50; % sampling frequency is 50 Hz
 
 
-
+% Array containing the binary responses inferred from SCR data.
 gsr_resp = zeros(300,1);
 gsr_index = 1;
 
+% Workaround for subject 8
 if ID == 12
     trial_onset = 8;
     gsr_resp(1:7) = subject.behav.raw.responses(1,1:7);
@@ -60,16 +52,16 @@ for trial_ind = trial_onset:300
     bin_off = sample_ind_onset + sf*resp_offset;
 
     trial_resp = analysis.phasicData(bin_on:bin_off);
+    %trial_resp = trial_resp/max(trial_resp);
     
     ind = mod(trial_ind,150);
     if ind == 0 
         ind = 150;
     end
     
+    % Compare trial response to canonical response
     if sqrt(sum((trial_resp-can_corr).^2)) < sqrt(sum((trial_resp-...
-            can_wrong).^2))
-    %if dot(trial_resp,can_corr) > dot(trial_resp, can_wrong)
-        
+            can_wrong).^2))        
         gsr_resp(trial_ind) = metadata.stimuli(ind);
     else
         gsr_resp(trial_ind) = ~metadata.stimuli(ind);
@@ -81,6 +73,7 @@ for trial_ind = trial_onset:300
 end
 
 gsr_resp = reshape(gsr_resp,2,150);
+
 
 end
 

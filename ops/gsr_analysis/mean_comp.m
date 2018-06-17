@@ -6,15 +6,12 @@ function [mean1, mean2] = mean_comp(ID,mode)
 % Parameters:
 % -------------
 %   ID          {int} ID of the subject
-%   INDS        {logical} [trials x 1] indicating which
 %   MODE        {'sound', 'block', 'nosound', 'PE','correct'} specifies the 
-%                   criteria
-%                   along which the trials are blocked. Sound returns
+%                   criteria along which the trials are blocked. Sound returns
 %                   neutral vs aversive, block returns block1 vs block2,
 %                   nosound returns nosound_block1 vs nosound_block2,
 %                   correct returns correct against wrong trials,
-%                   PE
-%                   returns trials with prediction error (wrong trials)
+%                   PE returns trials with prediction error (wrong trials)
 %                   against correct trials.
 %
 % Returns:
@@ -109,53 +106,53 @@ if strcmp(mode,'block') || strcmp(mode,'sound') || strcmp(mode,'nosound') ...
     end
     mean1 = mean(trials1,1);
     mean2 = mean(trials2,1);
+
     
-elseif strcmp(mode,'PE')
-    % For this mode we test the hypothesis that peaks in the GSR signal
-    % correspond to prediction errors. We compute the trial-wise mean and
-    % compare it to the mean of all trials to get a binary value (PE or
-    % not). 
-    % We correlate the resulting PE-trace with the HGF-PE trace and then
-    % fit a HGF based on the hypothetical responses that were given if the
-    % binary signal indeed corresponded to a prediction error.
-    
-    % compute mean of all trials
-    means = zeros(sum(trials),1);
-    for k = 1:sum(trials)
-        trial_onset = data.event(k).time; % ms precise sound onset
-        % index of the nearest SCR sample
-        sample_ind_onset = find(round(data.time*sf)/sf==...
-            round(trial_onset*sf)/sf);
-        % indices to crop the stimulus specific response
-        bin_on = sample_ind_onset + sf*resp_onset; 
-        bin_off = sample_ind_onset + sf*resp_offset;
-        means(k) = mean(analysis.phasicData(bin_on:bin_off));
-        
-    end
-    m = mean(means);
-    
-    PEs = zeros(sum(trials),1);
-    for k = 1:sum(trials)
-        trial_onset = data.event(k).time; % ms precise sound onset
-        % index of the nearest SCR sample
-        sample_ind_onset = find(round(data.time*sf)/sf==...
-            round(trial_onset*sf)/sf);
-        % indices to crop the stimulus specific response
-        bin_on = sample_ind_onset + sf*resp_onset; 
-        bin_off = sample_ind_onset + sf*resp_offset;
-        if mean(analysis.phasicData(bin_on:bin_off)) > m
-            PEs(k) = 1;       
-        end
-            
-    end
-    
-    mean1 = PEs;
-    mean2 = [];
 end
 
-
-
-
+%% THE BELOW CODE IS BULLSHIT
+% elseif strcmp(mode,'PE')
+%     % For this mode we test the hypothesis that peaks in the GSR signal
+%     % correspond to prediction errors. We compute the trial-wise mean and
+%     % compare it to the mean of all trials to get a binary value (PE or
+%     % not). 
+%     % We correlate the resulting PE-trace with the HGF-PE trace and then
+%     % fit a HGF based on the hypothetical responses that were given if the
+%     % binary signal indeed corresponded to a prediction error.
+%     
+%     % compute mean of all trials
+%     means = zeros(sum(trials),1);
+%     for k = 1:sum(trials)
+%         trial_onset = data.event(k).time; % ms precise sound onset
+%         % index of the nearest SCR sample
+%         sample_ind_onset = find(round(data.time*sf)/sf==...
+%             round(trial_onset*sf)/sf);
+%         % indices to crop the stimulus specific response
+%         bin_on = sample_ind_onset + sf*resp_onset; 
+%         bin_off = sample_ind_onset + sf*resp_offset;
+%         means(k) = mean(analysis.phasicData(bin_on:bin_off));
+%         
+%     end
+%     m = mean(means);
+%     
+%     PEs = zeros(sum(trials),1);
+%     for k = 1:sum(trials)
+%         trial_onset = data.event(k).time; % ms precise sound onset
+%         % index of the nearest SCR sample
+%         sample_ind_onset = find(round(data.time*sf)/sf==...
+%             round(trial_onset*sf)/sf);
+%         % indices to crop the stimulus specific response
+%         bin_on = sample_ind_onset + sf*resp_onset; 
+%         bin_off = sample_ind_onset + sf*resp_offset;
+%         if mean(analysis.phasicData(bin_on:bin_off)) > m
+%             PEs(k) = 1;       
+%         end
+%             
+%     end
+%     
+%     mean1 = PEs;
+%     mean2 = [];
+% end
 
 end
 

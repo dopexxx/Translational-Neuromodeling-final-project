@@ -1,0 +1,23 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{pagecolor} 
+
+\pagecolor{black}
+\color{white}
+\begin{document}
+
+\begin{align*}
+&\rm p\big(\mathbf{x_{3}^{(k)}}|\mathbf{x_{3}}^{(k-1)}\big) = \mathcal{N}\big(\mathbf{x_{3}}^{(k)};\mathbf{x_{3}}^{(k-1)},\textcolor{red}\theta\big) \\[1em]
+&\rm p\big(\mathbf{x_{2}^{(k)}}|\mathbf{x_{2}}^{(k-1)},\mathbf{x_{3}}^{(k)}\big) = \mathcal{N}\big(\mathbf{x_{2}}^{(k)};\mathbf{x_{2}}^{(k-1)},\rm exp(\textcolor{yellow}\kappa\mathbf{x_{3}}^{(k)}+\textcolor{green}\omega)\big) \\[1em] 
+&\rm p\big(\mathbf{x_{1}^{(k)}}|\mathbf{x_{2}^{(k)}}\big) = \rm Bernoulli\big(\mathbf{x_{1}^{(k)}};s(\mathbf{x_{2}^{(k)}})\big)\\[1em]
+&s(x) = \frac{1}{1+\rm exp(-x)}
+%&\rm p\big(u|\mathbf{x_{1}}) = u^{\mathbf{x_{1}}}(1-u)^{1-\mathbf{x_{1}}} \\ 
+\end{align*}
+For every subject $S$, we fit the model and obtain parameter sets for \textit{neutral} and \textit{aversive} blocks.
+\begin{align*}
+s_{i} = \{\textcolor{red}{\theta_{N}} ,\textcolor{yellow}{\kappa_{N}} , \textcolor{green}{\omega_{N}};\textcolor{red}{\theta_{A}} ,\textcolor{yellow}{\kappa_{A}} , \textcolor{green}{\omega_{A}}\}
+\end{align*}
+
+\end{document}
