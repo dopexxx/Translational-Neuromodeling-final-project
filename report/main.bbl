@@ -1,0 +1,140 @@
+\begin{thebibliography}{17}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Bach et~al.(2010)Bach, Daunizeau, Friston, and Dolan]{bach2010dynamic}
+Dominik~R Bach, Jean Daunizeau, Karl~J Friston, and Raymond~J Dolan.
+\newblock Dynamic causal modelling of anticipatory skin conductance responses.
+\newblock \emph{Biological psychology}, 85\penalty0 (1):\penalty0 163--170,
+  2010.
+
+\bibitem[Benedek and Kaernbach(2010)]{benedek2010continuous}
+Mathias Benedek and Christian Kaernbach.
+\newblock A continuous measure of phasic electrodermal activity.
+\newblock \emph{Journal of neuroscience methods}, 190\penalty0 (1):\penalty0
+  80--91, 2010.
+
+\bibitem[Brydevall et~al.(2018)Brydevall, Bennett, Murawski, and
+  Bode]{brydevall2018neural}
+Maja Brydevall, Daniel Bennett, Carsten Murawski, and Stefan Bode.
+\newblock The neural encoding of information prediction errors during
+  non-instrumental information seeking.
+\newblock \emph{Scientific reports}, 8\penalty0 (1):\penalty0 6134, 2018.
+
+\bibitem[Den~Ouden et~al.(2012)Den~Ouden, Kok, and De~Lange]{den2012prediction}
+Hanneke~EM Den~Ouden, Peter Kok, and Floris~P De~Lange.
+\newblock How prediction errors shape perception, attention, and motivation.
+\newblock \emph{Frontiers in psychology}, 3:\penalty0 548, 2012.
+
+\bibitem[Friston(2012)]{Friston2012}
+Karl Friston.
+\newblock {The history of the future of the Bayesian brain}.
+\newblock \emph{NeuroImage}, 62\penalty0 (2):\penalty0 1230--1233, 2012.
+\newblock ISSN 10538119.
+\newblock \doi{10.1016/j.neuroimage.2011.10.004}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.neuroimage.2011.10.004}.
+
+\bibitem[Gilbert et~al.(2016)Gilbert, Symmonds, Hanna, Dolan, Friston, and
+  Moran]{Gilbert2016}
+Jessica~R. Gilbert, Mkael Symmonds, Michael~G. Hanna, Raymond~J. Dolan, Karl~J.
+  Friston, and Rosalyn~J. Moran.
+\newblock {Profiling neuronal ion channelopathies with non-invasive brain
+  imaging and dynamic causal models: Case studies of single gene mutations}.
+\newblock \emph{NeuroImage}, 124:\penalty0 43--53, 2016.
+\newblock ISSN 10959572.
+\newblock \doi{10.1016/j.neuroimage.2015.08.057}.
+\newblock URL \url{http://dx.doi.org/10.1016/j.neuroimage.2015.08.057}.
+
+\bibitem[Iglesias et~al.(2013)Iglesias, Mathys, Brodersen, Kasper, Piccirelli,
+  den Ouden, and Stephan]{iglesias2013hierarchical}
+Sandra Iglesias, Christoph Mathys, Kay~H Brodersen, Lars Kasper, Marco
+  Piccirelli, Hanneke~EM den Ouden, and Klaas~E Stephan.
+\newblock Hierarchical prediction errors in midbrain and basal forebrain during
+  sensory learning.
+\newblock \emph{Neuron}, 80\penalty0 (2):\penalty0 519--530, 2013.
+
+\bibitem[Iglesias et~al.(2017)Iglesias, Tomiello, Schneebeli, and
+  Stephan]{iglesias2017models}
+Sandra Iglesias, Sara Tomiello, Maya Schneebeli, and Klaas~E Stephan.
+\newblock Models of neuromodulation for computational psychiatry.
+\newblock \emph{Wiley Interdisciplinary Reviews: Cognitive Science}, 8\penalty0
+  (3), 2017.
+
+\bibitem[Karenbach(2005)]{karenbach2005ledalab}
+C~Karenbach.
+\newblock Ledalab-a software package for the analysis of phasic electrodermal
+  activity.
+\newblock \emph{Internal report, Allgemeine Psychologie, Institut f{\"u}r
+  Psychologie, Institut ftir Psychologie, Tech. Rep.}, 2005.
+
+\bibitem[Liu et~al.(2017)Liu, Li, Pan, Wu, Chen, and Wang]{Liu2017}
+Jin Liu, Min Li, Yi~Pan, Fang~Xiang Wu, Xiaogang Chen, and Jianxin Wang.
+\newblock {Classification of Schizophrenia Based on Individual Hierarchical
+  Brain Networks Constructed from Structural MRI Images}.
+\newblock \emph{IEEE Transactions on Nanobioscience}, 16\penalty0 (7):\penalty0
+  600--608, 2017.
+\newblock ISSN 15361241.
+\newblock \doi{10.1109/TNB.2017.2751074}.
+
+\bibitem[Mathys et~al.(2014)Mathys, Lomakina, Daunizeau, Iglesias, Brodersen,
+  Friston, and Stephan]{Mathys2014}
+Christoph~D Mathys, Ekaterina~I Lomakina, Jean Daunizeau, Sandra Iglesias,
+  Kay~H Brodersen, Karl~J Friston, and Klaas~E Stephan.
+\newblock Uncertainty in perception and the hierarchical gaussian filter.
+\newblock \emph{Frontiers in human neuroscience}, 8:\penalty0 825, 2014.
+
+\bibitem[O'Neill and Schultz(2013)]{o2013risk}
+Martin O'Neill and Wolfram Schultz.
+\newblock Risk prediction error coding in orbitofrontal neurons.
+\newblock \emph{Journal of Neuroscience}, 33\penalty0 (40):\penalty0
+  15810--15814, 2013.
+
+\bibitem[Saha et~al.(2005)Saha, Chant, Welham, and McGrath]{Saha2005}
+Sukanta Saha, David Chant, Joy Welham, and John McGrath.
+\newblock {A systematic review of the prevalence of schizophrenia}.
+\newblock \emph{PLoS Medicine}, 2\penalty0 (5):\penalty0 0413--0433, 2005.
+\newblock ISSN 15491277.
+\newblock \doi{10.1371/journal.pmed.0020141}.
+
+\bibitem[Spoormaker et~al.(2011)Spoormaker, Andrade, Schr{\"o}ter, Sturm,
+  Goya-Maldonado, S{\"a}mann, and Czisch]{spoormaker2011neural}
+Victor~I Spoormaker, KC~Andrade, Manuel~S Schr{\"o}ter, A~Sturm, Roberto
+  Goya-Maldonado, Philipp~G S{\"a}mann, and Michael Czisch.
+\newblock The neural correlates of negative prediction error signaling in human
+  fear conditioning.
+\newblock \emph{Neuroimage}, 54\penalty0 (3):\penalty0 2250--2256, 2011.
+
+\bibitem[Spoormaker et~al.(2012)Spoormaker, Blechert, Goya-Maldonado,
+  S{\"a}mann, Wilhelm, and Czisch]{spoormaker2012additional}
+Victor~I Spoormaker, Jens Blechert, Roberto Goya-Maldonado, Philipp~G
+  S{\"a}mann, Frank~H Wilhelm, and Michael Czisch.
+\newblock Additional support for the existence of skin conductance responses at
+  unconditioned stimulus omission.
+\newblock \emph{Neuroimage}, 63\penalty0 (3):\penalty0 1404--1407, 2012.
+
+\bibitem[Symmonds et~al.(2018)Symmonds, Moran, Leite, Buckley, Irani, Stephan,
+  Friston, and Moran]{Symmonds2018a}
+Mkael Symmonds, Catherine~H Moran, M~Isabel Leite, Camilla Buckley, Sarosh~R
+  Irani, Klaas~Enno Stephan, Karl~J Friston, and Rosalyn~J Moran.
+\newblock {Ion channels in EEG : isolating channel dysfunction in NMDA receptor
+  antibody encephalitis}.
+\newblock \penalty0 (May):\penalty0 1--12, 2018.
+\newblock ISSN 0006-8950.
+\newblock \doi{10.1093/brain/awy107}.
+
+\bibitem[van Leeuwen et~al.(2011)van Leeuwen, den Ouden, and
+  Hagoort]{VanLeeuwen2011}
+T.~M. van Leeuwen, H.~E.~M. den Ouden, and P.~Hagoort.
+\newblock {Effective Connectivity Determines the Nature of Subjective
+  Experience in Grapheme-Color Synesthesia}.
+\newblock \emph{Journal of Neuroscience}, 31\penalty0 (27):\penalty0
+  9879--9884, 2011.
+\newblock ISSN 0270-6474.
+\newblock \doi{10.1523/JNEUROSCI.0569-11.2011}.
+\newblock URL
+  \url{http://www.jneurosci.org/cgi/doi/10.1523/JNEUROSCI.0569-11.2011}.
+
+\end{thebibliography}

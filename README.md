@@ -1,4 +1,4 @@
-# TNM_project
+# The Influence of Stimulus Nature on Probabilistic Inference in Generative Models of Behavior and its Physiological Correlates
 
 
 ## Project Specifications 
@@ -6,7 +6,7 @@
 - Course: Translational Neuromodeling 
 - Time: Summer Term 2018
 - Contributors: Jannis Born, Moritz Gruber, Lukas Vogelsang
-- Title:
+- Title: The Influence of Stimulus Nature on Probabilistic Inference in Generative Models of Behavior and its Physiological Correlates
 
 ## Requirements
 - MATLAB
@@ -30,9 +30,10 @@ In order to orient yourself, please note that:
 
 1.  /ops            contains all the code
 2.  /data           contains the raw measurements as well as the post-hoc analysis files
-3.  experiment.m    is the file that was executed to run the experiment
-4.  metadata.mat    contains a structure specifying the experimental hyperparameter (stimuli presentation time etc.)
-5.  run_analysis.m  can be executed in order to redo the analysis
+3.  /report         contains the latex files to generate the report
+4.  experiment.m    is the file that was executed to run the experiment
+5.  metadata.mat    contains a structure specifying the experimental hyperparameter (stimuli presentation time etc.)
+6.  run_analysis.m  can be executed in order to redo the analysis
 
 
 Feel free to fork and pull request in case you find any errors. If you have any questions, please do get in touch at any time via:

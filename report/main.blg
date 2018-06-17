@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2016/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: main.aux
+The style file: plainnat.bst
+Database file #1: TNM_bib.bib
+Warning--empty journal in Symmonds2018a
+Warning--there's a number but no volume in Symmonds2018a
+You've used 17 entries,
+            2773 wiz_defined-function locations,
+            727 strings with 9090 characters,
+and the built_in function-call counts, 9743 in all, are:
+= -- 857
+> -- 722
+< -- 4
++ -- 242
+- -- 225
+* -- 923
+:= -- 1553
+add.period$ -- 66
+call.type$ -- 17
+change.case$ -- 126
+chr.to.int$ -- 17
+cite$ -- 36
+duplicate$ -- 351
+empty$ -- 668
+format.name$ -- 246
+if$ -- 1968
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 17
+newline$ -- 108
+num.names$ -- 68
+pop$ -- 210
+preamble$ -- 1
+purify$ -- 109
+quote$ -- 0
+skip$ -- 283
+stack$ -- 0
+substring$ -- 385
+swap$ -- 16
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 187
+warning$ -- 2
+while$ -- 78
+width$ -- 0
+write$ -- 256
+(There were 2 warnings)

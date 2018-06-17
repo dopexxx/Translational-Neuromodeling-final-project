@@ -48,8 +48,8 @@ plot_diff_distribution(default_config);
 load(all(1).name); HGF_input_seq = subject.behav.css.input;
 
 %% (D) GSR Analysis
-%gsr_analysis();
 
+% Please execute the file gsr_results section by section
 
 
 %% (E) Alpha model% not pretty yet. 
